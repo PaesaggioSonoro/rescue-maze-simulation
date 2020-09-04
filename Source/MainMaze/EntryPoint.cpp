@@ -33,12 +33,12 @@ void AEntryPoint::BeginPlay()
 {
 	Super::BeginPlay();
 	const Value& dims = data["header"]["dims"];
-	int d_x = (dims[0].GetInt()) * 300, d_y = (dims[1].GetInt()) * 300;
+	int d_x = (dims[0].GetInt()) * DISTANCE, d_y = (dims[1].GetInt()) * DISTANCE;
 
 
 	const Value& level = data["body"][level_n];
 	for (unsigned int i = 0; i < level.GetArray().Capacity(); i++) {
-		FVector newPos = FVector(300 * level[i]["coord"][0].GetInt(), 300 * level[i]["coord"][1].GetInt(), 100);
+		FVector newPos = FVector(DISTANCE * level[i]["coord"][0].GetInt(), DISTANCE * level[i]["coord"][1].GetInt(), HEIGHT);
 		FTransform newTr = FTransform(newPos);
 		std::vector<int> v;
 		for (auto& val : level[i]["walls"].GetArray()) {
@@ -62,7 +62,7 @@ void AEntryPoint::BeginPlay()
 		UGameplayStatics::FinishSpawningActor(a, a->GetTransform());
 	}
 
-	FVector StartLocation = FVector((data["header"]["start"][1].GetInt() * 300) + 150, (data["header"]["start"][2].GetInt() * 300) + 150, 200);
+	FVector StartLocation = FVector((data["header"]["start"][1].GetInt() * DISTANCE) + DISTANCE/2.0, (data["header"]["start"][2].GetInt() * DISTANCE) + DISTANCE/2.0, HEIGHT*2);
 	FRotator StartRotation = FRotator(0, 0, 0);
 	CameraActor->SetActorLocationAndRotation(StartLocation, StartRotation, false, 0, ETeleportType::None);
 
