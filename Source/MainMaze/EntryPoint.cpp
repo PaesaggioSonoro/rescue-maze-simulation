@@ -11,7 +11,8 @@ AEntryPoint::AEntryPoint()
 
 	//UE_LOG(LogTemp, Warning, TEXT("dsafda: %s"), UPathContainer::getPath());
 	if (fast_start==true) {
-		std::ifstream in(R"(F:\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+		//std::ifstream in(R"(F:\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+		std::ifstream in(R"(C:\Users\Stark\Documents\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
 		//std::ifstream in(TEXT("default.json"));
 		std::string file((std::istreambuf_iterator<char>(in)),
 		std::istreambuf_iterator<char>());
@@ -33,12 +34,14 @@ void AEntryPoint::BeginPlay()
 {
 	Super::BeginPlay();
 	const Value& dims = data["header"]["dims"];
-	int d_x = (dims[0].GetInt()) * DISTANCE, d_y = (dims[1].GetInt()) * DISTANCE;
+	// int d_x = (dims[0].GetInt()) * DISTANCE, d_y = (dims[1].GetInt()) * DISTANCE;
+	FVector location = GetActorLocation();
+	float bias_x = location.X, bias_y = location.Y, bias_z = location.Z;
 
 
 	const Value& level = data["body"][level_n];
 	for (unsigned int i = 0; i < level.GetArray().Capacity(); i++) {
-		FVector newPos = FVector(DISTANCE * level[i]["coord"][0].GetInt(), DISTANCE * level[i]["coord"][1].GetInt(), HEIGHT);
+		FVector newPos = FVector(DISTANCE * level[i]["coord"][0].GetInt() + bias_x, DISTANCE * level[i]["coord"][1].GetInt() + bias_y, HEIGHT + bias_z);
 		FTransform newTr = FTransform(newPos);
 		std::vector<int> v;
 		for (auto& val : level[i]["walls"].GetArray()) {
@@ -62,7 +65,7 @@ void AEntryPoint::BeginPlay()
 		UGameplayStatics::FinishSpawningActor(a, a->GetTransform());
 	}
 
-	FVector StartLocation = FVector((data["header"]["start"][1].GetInt() * DISTANCE) + DISTANCE/2.0, (data["header"]["start"][2].GetInt() * DISTANCE) + DISTANCE/2.0, HEIGHT*2);
+	FVector StartLocation = FVector((data["header"]["start"][1].GetInt() * DISTANCE + bias_x) + DISTANCE/2.0, (data["header"]["start"][2].GetInt() * DISTANCE + bias_y) + DISTANCE/2.0, HEIGHT*2 + bias_z);
 	FRotator StartRotation = FRotator(0, 0, 0);
 	CameraActor->SetActorLocationAndRotation(StartLocation, StartRotation, false, 0, ETeleportType::None);
 
