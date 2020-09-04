@@ -65,6 +65,6 @@ public:
 private:
 	Document data;
 	const int DISTANCE = 30;
-	const int HEIGHT = 100;
+	const int HEIGHT = 0;
 
 };
