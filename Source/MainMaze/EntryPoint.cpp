@@ -11,8 +11,11 @@ AEntryPoint::AEntryPoint()
 
 	//UE_LOG(LogTemp, Warning, TEXT("dsafda: %s"), UPathContainer::getPath());
 	if (fast_start==true) {
-		//std::ifstream in(R"(F:\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+#if _DEBUG_MACHINE == 0
 		std::ifstream in(R"(C:\Users\Stark\Documents\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+#else
+		std::ifstream in(R"(F:\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+#endif
 		//std::ifstream in(TEXT("default.json"));
 		std::string file((std::istreambuf_iterator<char>(in)),
 		std::istreambuf_iterator<char>());

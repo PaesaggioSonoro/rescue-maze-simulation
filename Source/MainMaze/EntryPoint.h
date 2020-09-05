@@ -43,12 +43,6 @@ class MAINMAZE_API AEntryPoint : public AActor
 
 	UPROPERTY(EditAnywhere, Category = "Settings", meta = (DisplayName="Level number", ClampMin = "0", ClampMax = "15", UIMin = "0", UIMax = "3"))
 	int level_n = 0;
-
-	
-
-	
-
-	
 	
 public:	
 	// Sets default values for this actor's properties
