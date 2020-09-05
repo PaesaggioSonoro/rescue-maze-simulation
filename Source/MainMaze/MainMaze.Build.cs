@@ -9,7 +9,7 @@ public class MainMaze : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDefinitions.Add("_EXECUTION_ENVIRONMENT=UNREAL");
-		PublicDefinitions.Add("_DEBUG_MACHINE=0");
+		PublicDefinitions.Add("_DEBUG_MACHINE=1");
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "SlateCore", "RenderCore", "RHI" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

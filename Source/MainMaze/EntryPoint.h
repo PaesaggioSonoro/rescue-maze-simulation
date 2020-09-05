@@ -30,6 +30,7 @@ class MAINMAZE_API AEntryPoint : public AActor
 	UPROPERTY(EditAnywhere, Category = "Main|Class")
 	AActor* CameraActor;
 
+
 	UPROPERTY(EditAnywhere, Category = "Main|Materials")
 	class UMaterialInterface* BlackMaterial;
 	UPROPERTY(EditAnywhere, Category = "Main|Materials")
