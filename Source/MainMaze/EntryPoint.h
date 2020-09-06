@@ -13,6 +13,9 @@
 #include "rapidjson/document.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+
+
 #include "EntryPoint.generated.h"
 
 using namespace rapidjson;
@@ -22,15 +25,16 @@ UCLASS()
 class MAINMAZE_API AEntryPoint : public AActor
 {
 	GENERATED_BODY()
-
+	UPROPERTY(EditAnywhere, Category = "Main")
+	bool ShowIntro = true;
 	UPROPERTY(EditAnywhere, Category = "Main|Class", meta = (DisplayName = "Cell to spawn"))
 	TSubclassOf<AActor> CellToSpawn;
 	UPROPERTY(EditAnywhere, Category = "Main|Class", meta = (DisplayName = "Wall to spawn"))
 	TSubclassOf<AActor> WallToSpawn;
 	UPROPERTY(EditAnywhere, Category = "Main|Class")
 	AActor* CameraActor;
-
-
+	
+	
 	UPROPERTY(EditAnywhere, Category = "Main|Materials")
 	class UMaterialInterface* BlackMaterial;
 	UPROPERTY(EditAnywhere, Category = "Main|Materials")
@@ -38,7 +42,7 @@ class MAINMAZE_API AEntryPoint : public AActor
 	UPROPERTY(EditAnywhere, Category = "Main|Materials")
 	class UMaterialInterface* BaseMaterial;
 
-	/**Enabling this option allows to start level directly from here, but the JSON file is not choosable. */
+	/**Enabling this option allows to start level directly from here, but the JSON file is not choosable */
 	UPROPERTY(EditAnywhere, Category = "Settings", meta = (DisplayName = "Fast start"))
 	bool fast_start = true;
 
@@ -49,6 +53,9 @@ public:
 	// Sets default values for this actor's properties
 	AEntryPoint();
 
+	UFUNCTION(BlueprintCallable)
+	bool getShowIntro();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

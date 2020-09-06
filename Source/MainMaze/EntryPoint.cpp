@@ -7,17 +7,17 @@
 AEntryPoint::AEntryPoint()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	//UE_LOG(LogTemp, Warning, TEXT("dsafda: %s"), UPathContainer::getPath());
 	if (fast_start==true) {
 #if _DEBUG_MACHINE == 0
-		std::ifstream in(R"(C:\Users\Stark\Documents\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+		std::ifstream In(R"(C:\Users\Stark\Documents\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
 #else
-		std::ifstream in(R"(F:\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+		std::ifstream In(R"(F:\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
 #endif
 		//std::ifstream in(TEXT("default.json"));
-		std::string file((std::istreambuf_iterator<char>(in)),
+		std::string file((std::istreambuf_iterator<char>(In)),
 		std::istreambuf_iterator<char>());
 		data.Parse(file.c_str());
 	}
@@ -77,9 +77,11 @@ void AEntryPoint::BeginPlay()
 }
 
 // Called every frame
-void AEntryPoint::Tick(float DeltaTime)
+void AEntryPoint::Tick(float DeltaTime)		//DISABLED
 {
 	Super::Tick(DeltaTime);
 
 }
+
+bool AEntryPoint::getShowIntro() {return ShowIntro;}
 
