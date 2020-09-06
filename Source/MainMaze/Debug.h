@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "IMU.h"
+#include "Gyro.h"
 #include "MLX90614.h"
 
 #include "UObject/UObjectGlobals.h"
@@ -55,7 +55,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Thermometer", meta = (DisplayName = "Enable logging"))
 	bool ThermDebug = false;
 
-	IMU imu;
+	Gyro imu;
 	MLX90614 therm;
 
 protected:
