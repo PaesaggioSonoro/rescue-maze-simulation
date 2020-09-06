@@ -77,7 +77,7 @@ void AEntryPoint::BeginPlay()
 }
 
 // Called every frame
-void AEntryPoint::Tick(float DeltaTime)		//DISABLED
+void AEntryPoint::Tick(float DeltaTime)		// DISABLED
 {
 	Super::Tick(DeltaTime);
 
