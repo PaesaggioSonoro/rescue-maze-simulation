@@ -6,8 +6,8 @@
 // Sets default values
 ACell::ACell()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = true;
 
     BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
     RootComponent = BaseMesh;
@@ -19,37 +19,33 @@ ACell::ACell()
         BaseMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
         BaseMesh->SetWorldScale3D(FVector(1.f));
     }
-
 }
 
 // Called when the game starts or when spawned
 void ACell::BeginPlay()
 {
-	Super::BeginPlay();
-	
+    Super::BeginPlay();
 }
 
 // Called every frame
 void ACell::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
+    Super::Tick(DeltaTime);
 }
 
 void ACell::Build(TSubclassOf<AActor> Wall, std::vector<int> walls, UMaterialInterface* material)
 {
-
     BaseMesh->SetMaterial(0, material);
 
     for (int i = 0; i < walls.size(); i++) // access by reference to avoid copying
     {
-        if (walls[i] == 1) {
+        if (walls[i] == 1)
+        {
             FVector location = GetActorLocation();
             location.X += points[i][0];
             location.Y += points[i][1];
             FRotator rotation = FRotator(0, -90 * (i + 1), 0);
             GetWorld()->SpawnActor(Wall, &location, &rotation);
         }
-
     }
 }

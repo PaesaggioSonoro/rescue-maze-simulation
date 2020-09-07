@@ -13,24 +13,23 @@ using namespace std;
 UCLASS()
 class MAINMAZE_API ACell : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	ACell();
+    GENERATED_BODY()
+
+public:
+    // Sets default values for this actor's properties
+    ACell();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	void Build(TSubclassOf<AActor> Wall, std::vector<int> walls, UMaterialInterface* material);
+public:
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
+    void Build(TSubclassOf<AActor> Wall, std::vector<int> walls, UMaterialInterface* material);
 
 private:
-	int points[4][2] = { {30, 30}, {30, 0}, {0, 0}, {0, 30} };
-	class UStaticMeshComponent* BaseMesh;
-
+    int points[4][2] = {{30, 30}, {30, 0}, {0, 0}, {0, 30}};
+    class UStaticMeshComponent* BaseMesh;
 };

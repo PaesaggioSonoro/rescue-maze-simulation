@@ -14,12 +14,14 @@
 UCLASS()
 class MAINMAZE_API USelectFile : public UBlueprintFunctionLibrary
 {
-	GENERATED_BODY()	public:
+    GENERATED_BODY()
+public:
 
-	UFUNCTION(BlueprintCallable, Category = "FileSelector")
-	static void OpenFileDialog(const FString& DialogTitle, const FString& DefaultPath, const FString& FileTypes, TArray<FString>& OutFileNames);
+    UFUNCTION(BlueprintCallable, Category = "FileSelector")
+    static void OpenFileDialog(const FString& DialogTitle, const FString& DefaultPath, const FString& FileTypes,
+                               TArray<FString>& OutFileNames);
 
-	/*Prints the data of the given file*/
-	UFUNCTION(BlueprintCallable, Category = "FileSelector")
-	void PrintData(const FString& File);
+    /*Prints the data of the given file*/
+    UFUNCTION(BlueprintCallable, Category = "FileSelector")
+    void PrintData(const FString& File);
 };
