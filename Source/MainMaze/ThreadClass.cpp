@@ -3,14 +3,22 @@
 #include "ThreadClass.h"
 
 
-ThreadClass::ThreadClass(int val)
+#include "MainMaze/robot/Robot.h"
+#include "MainMaze/robot/lib/interfaces/IBus.h"
+#include "robot/servicelocator/RobotServiceLocator.h"
+
+
+ThreadClass::ThreadClass(int val, DrivableActor* Actor)
 {
     this->UpLimit = val;
+    this->Actor = Actor;
 }
 
 void ThreadClass::DoWork()
 {
-    (new Robot())->setup();
+    auto& rsl = RobotServiceLocator::instance();
+    rsl.sl()->getContext()->resolve<IBus>()->SetBus(Actor);
+    Robot().setup();
     for (int32 i = 1; i <= this->UpLimit; i++)
     {
         bool isPrime = true;

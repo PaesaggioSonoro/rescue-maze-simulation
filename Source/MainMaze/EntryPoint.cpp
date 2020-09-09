@@ -96,5 +96,6 @@ bool AEntryPoint::GetShowIntro() { return ShowIntro; }
 
 void AEntryPoint::StartRobot(const int UpperLimit)
 {
-    (new FAutoDeleteAsyncTask<ThreadClass>(UpperLimit))->StartBackgroundTask();
+    DrivableActor* Actor = Cast<AMainVehicle>(CameraActor);
+    if (Actor != nullptr) (new FAutoDeleteAsyncTask<ThreadClass>(UpperLimit, Actor))->StartBackgroundTask();
 }

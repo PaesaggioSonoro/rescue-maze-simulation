@@ -13,11 +13,13 @@
 
 #include <math.h>
 #include <string.h>
+
+#include "DrivableActor.h"
 #include "GameFramework/Actor.h"
 #include "MainVehicle.generated.h"
 
 UCLASS()
-class MAINMAZE_API AMainVehicle : public AActor
+class MAINMAZE_API AMainVehicle : public AActor, public DrivableActor
 {
 	GENERATED_BODY()
 	
@@ -55,6 +57,12 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual FRotator GetRotator() override;
+	
+	virtual void SetSpeedR(int speed) override;
+	virtual void SetSpeedL(int speed) override;
+	virtual void SetSpeed(int speedL, int speedR) override;
 
 private:
 

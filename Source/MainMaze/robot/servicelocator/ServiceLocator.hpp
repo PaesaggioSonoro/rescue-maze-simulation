@@ -22,7 +22,7 @@
 #include <list>
 #include <set>
 #include <typeindex>
-//#include <cxxabi.h>
+// #include <cxxabi.h>
 #include <functional>
 #include <memory>
 
@@ -114,8 +114,8 @@ public:
 
         std::string getTypeName(const std::type_index& typeIndex) const
         {
-            int status;
-            //auto s = __cxxabiv1::__cxa_demangle (typeIndex.name(), nullptr, nullptr, &status);
+            int status=0;
+            // auto s = __cxxabiv1::__cxa_demangle (typeIndex.name(), nullptr, nullptr, &status);
             auto s = typeIndex.name();
             std::string result;
             switch (status)
@@ -319,7 +319,7 @@ public:
         std::function<sptr<IFace>(const std::string&)> provider()
         {
             // We lock the weak_ptr to our ServiceLocator, the lock returns a shared_ptr which will keep
-            // it alive into the returned lambda via the capture of sl
+            // it alive into the returned lambda via the capture of _sl
             auto sl = _sl.lock();
             return [sl](const std::string& name = "")
             {
@@ -336,7 +336,7 @@ public:
         std::function<sptr<IFace>(const std::string&)> tryProvider()
         {
             // We lock the weak_ptr to our ServiceLocator, the lock returns a shared_ptr which will keep
-            // it alive into the returned lambda via the capture of sl
+            // it alive into the returned lambda via the capture of _sl
             auto sl = _sl.lock();
             return [sl](const std::string& name = "")
             {

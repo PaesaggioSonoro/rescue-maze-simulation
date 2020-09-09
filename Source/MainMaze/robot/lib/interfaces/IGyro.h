@@ -3,13 +3,13 @@
 class IGyro
 {
 public:
-    IGyro();
-    void begin(AActor* TMainCharacter);
-    bool checko();
-    void start(unsigned long refresh);
-    float yaw();
-    float roll();
-    float pitch();
+    virtual void start(unsigned long refresh) = 0;
+    virtual float yaw() = 0;
+    virtual float roll() = 0;
+    virtual float pitch() = 0;
+    virtual void calibrate() = 0;
+    virtual ~IGyro() = default;
     // float getTemperature();
-    void calibrate();
+    // void begin(AActor* TMainCharacter);
+    // bool checko();
 };

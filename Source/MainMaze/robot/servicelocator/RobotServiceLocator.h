@@ -1,17 +1,15 @@
 ﻿#pragma once
-#include "../utils/singleton.hpp"
+#include "../utils/Singleton.hpp"
 #include "ServiceLocator.hpp"
+
 
 class RobotServiceLocator : public Singleton<RobotServiceLocator>
 {
 public:
     RobotServiceLocator();
-    // #if _EXECUTION_ENVIRONMENT=0
-    //
-    // #else
-    //     
-    // #endif
+
+    sptr<ServiceLocator> sl();
 
 private:
-    sptr<ServiceLocator> sl;
+    sptr<ServiceLocator> _sl;
 };
