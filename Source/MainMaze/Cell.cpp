@@ -3,6 +3,9 @@
 
 #include "Cell.h"
 
+#include "Wall.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 ACell::ACell()
 {
@@ -33,7 +36,7 @@ void ACell::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void ACell::Build(TSubclassOf<AActor> Wall, std::vector<int> walls, UMaterialInterface* material)
+void ACell::Build(std::vector<int> walls, UMaterialInterface* material, bool temp)
 {
     BaseMesh->SetMaterial(0, material);
 
@@ -44,8 +47,11 @@ void ACell::Build(TSubclassOf<AActor> Wall, std::vector<int> walls, UMaterialInt
             FVector location = GetActorLocation();
             location.X += points[i][0];
             location.Y += points[i][1];
-            FRotator rotation = FRotator(0, -90 * (i + 1), 0);
-            GetWorld()->SpawnActor(Wall, &location, &rotation);
+            FTransform Transform = FTransform(location);
+            Transform.SetRotation(FRotator(0, -90 * (i + 1), 0).Quaternion());
+            AWall* wall = GetWorld()->SpawnActorDeferred<AWall>(AWall::StaticClass(), Transform);
+            wall->temp = temp ? 40 : 25;
+            UGameplayStatics::FinishSpawningActor(wall, wall->GetTransform());
         }
     }
 }

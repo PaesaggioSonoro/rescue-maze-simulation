@@ -27,9 +27,9 @@ protected:
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
-    void Build(TSubclassOf<AActor> Wall, std::vector<int> walls, UMaterialInterface* material);
+    void Build(std::vector<int> walls, UMaterialInterface* material, bool temp);
 
 private:
     int points[4][2] = {{30, 30}, {30, 0}, {0, 0}, {0, 30}};
-    class UStaticMeshComponent* BaseMesh;
+    UStaticMeshComponent* BaseMesh;
 };

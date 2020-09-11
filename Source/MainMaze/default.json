@@ -89,7 +89,7 @@
         ],
         "black": false,
         "checkpoint": false,
-        "victim": false,
+        "victim": true,
         "ramp": ""
       },
       {

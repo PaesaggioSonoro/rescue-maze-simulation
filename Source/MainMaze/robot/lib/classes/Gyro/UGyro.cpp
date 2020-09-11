@@ -1,4 +1,4 @@
-﻿#include "UGyro.h"
+﻿#include "UGyro.hpp"
 
 
 UGyro::UGyro(DrivableActor* actor)
@@ -12,17 +12,17 @@ void UGyro::start(unsigned long refresh)
 
 float UGyro::yaw()
 {
-    return actor->GetRotator().Yaw + CalculateError();
+    return actor->GetActor()->GetActorRotation().Yaw + CalculateError();
 }
 
 float UGyro::roll()
 {
-    return actor->GetRotator().Roll + CalculateError();
+    return actor->GetActor()->GetActorRotation().Roll + CalculateError();
 }
 
 float UGyro::pitch()
 {
-    return actor->GetRotator().Pitch + CalculateError();
+    return actor->GetActor()->GetActorRotation().Pitch + CalculateError();
 }
 
 void UGyro::calibrate()
@@ -34,7 +34,7 @@ float UGyro::CalculateError()
 {
     if (error)
     {
-        srand((int)time(0));
+        srand(static_cast<int>(time(nullptr)));
         auto now = high_resolution_clock::now();
         auto nanos = duration_cast<nanoseconds>(now.time_since_epoch()).count();
         srand(nanos);

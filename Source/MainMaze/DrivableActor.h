@@ -1,12 +1,12 @@
 ﻿#pragma once
 
+#include "CoreMinimal.h"
+
 class DrivableActor
 {
-protected:
-    ~DrivableActor() = default;
 public:
 
-    virtual FRotator GetRotator() = 0;
+    virtual AActor* GetActor() = 0;
 
     // Actuation
     virtual void SetSpeedR(int speed) = 0;

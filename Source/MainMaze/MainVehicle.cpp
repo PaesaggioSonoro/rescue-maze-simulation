@@ -3,6 +3,8 @@
 
 #include "MainVehicle.h"
 
+#include "DrawDebugHelpers.h"
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 /*int AMainVehicle::speed_R = 255;
@@ -51,9 +53,9 @@ void AMainVehicle::Tick(float DeltaTime)
     move(DeltaTime);
 }
 
-FRotator AMainVehicle::GetRotator()
+AActor* AMainVehicle::GetActor()
 {
-    return this->GetActorRotation();
+    return Cast<AActor>(this);
 }
 
 void AMainVehicle::SetSpeedR(int speed)
@@ -145,5 +147,5 @@ void AMainVehicle::move(float time)
     }
 
     FVector location = center.toVector(height);
-    SetActorLocationAndRotation(location, rotator, false, 0, ETeleportType::None);
+    SetActorLocationAndRotation(location, rotator, false, nullptr, ETeleportType::None);
 }

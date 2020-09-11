@@ -71,15 +71,15 @@ void AEntryPoint::BeginPlay()
             material = BaseMaterial;
         }
 
-        a->Build(*WallToSpawn, v, material);
+        a->Build(v, material, level[i]["victim"].GetBool());
         UGameplayStatics::FinishSpawningActor(a, a->GetTransform());
     }
 
     FVector StartLocation = FVector((data["header"]["start"][1].GetInt() * DISTANCE + bias_x) + DISTANCE / 2.0,
                                     (data["header"]["start"][2].GetInt() * DISTANCE + bias_y) + DISTANCE / 2.0,
-                                    HEIGHT * 2 + bias_z);
+                                    (HEIGHT + bias_z + 15));
     FRotator StartRotation = FRotator(0, 0, 0);
-    CameraActor->SetActorLocationAndRotation(StartLocation, StartRotation, false, 0, ETeleportType::None);
+    CameraActor->SetActorLocationAndRotation(StartLocation, StartRotation, false, nullptr, ETeleportType::None);
 
     APlayerController* MyController = UGameplayStatics::GetPlayerController(this, 0);
     MyController->SetViewTargetWithBlend(CameraActor, 2.f);
