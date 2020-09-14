@@ -4,12 +4,12 @@ UBus::UBus()
 {
 }
 
-void UBus::SetBus(DrivableActor* Actor)
+void UBus::setBus(DrivableActor* Actor)
 {
     this->Bus = Actor;
 }
 
-DrivableActor* UBus::GetBus()
+DrivableActor* UBus::getBus()
 {
     return Bus;
 }

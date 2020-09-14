@@ -6,9 +6,11 @@
 class MBus : public ServiceLocator::Module
 {
 public:
+    virtual ~MBus() = default;
+
     void load() override
     {
-        bind<IBus>().to<UBus>([](SLContext_sptr slc)
+        bind<IBus>().to<UBus>([](SLContext_sptr /*slc*/)
         {
             return new UBus();
         }).asSingleton();

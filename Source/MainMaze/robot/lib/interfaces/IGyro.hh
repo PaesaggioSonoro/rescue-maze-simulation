@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
+#pragma once
 
 class IGyro
 {
@@ -9,7 +10,4 @@ public:
     virtual float pitch() = 0;
     virtual void calibrate() = 0;
     virtual ~IGyro() = default;
-    // float getTemperature();
-    // void begin(AActor* TMainCharacter);
-    // bool checko();
 };

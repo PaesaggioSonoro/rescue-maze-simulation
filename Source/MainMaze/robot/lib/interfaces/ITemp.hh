@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
+#pragma once
 #include "MainMaze/robot/utils/GeometricPair.hxx"
 
 class ITemp

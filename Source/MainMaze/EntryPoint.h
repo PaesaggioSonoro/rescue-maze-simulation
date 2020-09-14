@@ -2,15 +2,7 @@
 
 #pragma once
 
-#include "UObject/UObjectGlobals.h"
-#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
-#include "PathContainer.h"
-#include <fstream>
-#include <string.h>
-#include <vector>
-#include "Cell.h"
-#include "ThreadClass.h"
 #include "rapidjson/document.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -42,7 +34,7 @@ class MAINMAZE_API AEntryPoint : public AActor
     UPROPERTY(EditAnywhere, Category = "Main|Materials")
     class UMaterialInterface* BaseMaterial;
 
-    /**Enabling this option allows to start level directly from here, but the JSON file is not choosable */
+    /**Enabling this option allows to start level directly from here, but the JSON file is not selectable */
     UPROPERTY(EditAnywhere, Category = "Settings", meta = (DisplayName = "Fast start"))
     bool fast_start = true;
 
@@ -55,22 +47,22 @@ public:
     AEntryPoint();
 
     UFUNCTION(BlueprintCallable, Category="Introduction")
-    bool GetShowIntro();
+    bool GetShowIntro() const;
 
     UFUNCTION(BlueprintCallable, Category="Robot")
-    void StartRobot(const int UpperLimit);
+    void StartRobot(int UpperLimit) const;
 
 
 protected:
     // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
+    void BeginPlay() override;
 
 public:
     // Called every frame
-    virtual void Tick(float DeltaTime) override;
+    void Tick(float DeltaTime) override;
 
 private:
-    Document data;
+    Document Data;
     const int DISTANCE = 30;
     const int HEIGHT = 0;
 };

@@ -17,7 +17,7 @@ ThreadClass::ThreadClass(int val, DrivableActor* Actor)
 void ThreadClass::DoWork()
 {
     auto& rsl = RobotServiceLocator::instance();
-    rsl.sl()->getContext()->resolve<IBus>()->SetBus(Actor);
+    rsl.sl()->getContext()->resolve<IBus>()->setBus(Actor);
     Robot().setup();
     // for (int i=0; i<1000; i++)
     // for (int32 i = 1; i <= this->UpLimit; i++)

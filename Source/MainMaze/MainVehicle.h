@@ -8,10 +8,6 @@
 
 #include "CoreMinimal.h"
 #include "Point.h"
-//#include "ThreadClass.h"
-
-#include <math.h>
-
 #include "DrivableActor.h"
 #include "MainVehicle.generated.h"
 
@@ -34,43 +30,39 @@ public:
     int UpperLimit = 100000;
 
     UPROPERTY(EditAnywhere, Category="Speed", meta = (ClampMin = "-255", ClampMax = "255", UIMin = "-15", UIMax = "15"))
-    int speed_R;
+    int Speed_R;
     UPROPERTY(EditAnywhere, Category="Speed", meta = (ClampMin = "-255", ClampMax = "255", UIMin = "-15", UIMax = "15"))
-    int speed_L;
+    int Speed_L;
 
-    /*UFUNCTION(BlueprintCallable, Category = "MotorSpeed")
-    static void SetSpeedLeft(const int delta);
-    UFUNCTION(BlueprintCallable, Category = "MotorSpeed")
-    static void SetSpeedRight(const int delta);
-    UFUNCTION(BlueprintCallable, Category = "MotorDebug")
-    static FString GetSpeed();*/
-
-    void brake();
+    void Brake();
 
 protected:
     // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
+    void BeginPlay() override;
 
 public:
     // Called every frame
-    virtual void Tick(float DeltaTime) override;
+    void Tick(float DeltaTime) override;
 
     AActor* GetActor() override;
 
-    void SetSpeedR(int speed) override;
-    void SetSpeedL(int speed) override;
-    void SetSpeed(int speedL, int speedR) override;
+    FVector GetSize() const override;
+
+    void SetSpeedR(int Speed) override;
+    void SetSpeedL(int Speed) override;
+    void SetSpeed(int SpeedL, int SpeedR) override;
 
 private:
 
-    float height;
-    const float D = 100.0; // distanza tra ruote
-    const float R = 50.0; // D/2
+    float Height;
+    const FVector Size = FVector(20, 15, 12);
+    const float D = Size.Y; // distanza tra ruote
+    const float R = Size.Y / 2; // D/2
     const float TO_DEGREES = 180 / M_PI;
 
-    float getDistance(int speed, float time);
-    float getRadius(float l1, float l2);
-    float getAngle(float l1, float l2, float r);
+    float GetDistance(int Speed, float Time);
+    float GetRadius(float L1, float L2);
+    float GetAngle(float L1, float L2, float Radius);
 
-    void move(float time);
+    void Move(float Time);
 };

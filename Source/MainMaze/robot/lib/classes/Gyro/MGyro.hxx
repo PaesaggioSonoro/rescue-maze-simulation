@@ -7,11 +7,13 @@
 class MGyro : public ServiceLocator::Module
 {
 public:
+    virtual ~MGyro() = default;
+
     void load() override
     {
         bind<IGyro>().to<UGyro>([](SLContext_sptr slc)
         {
-            return new UGyro(slc->resolve<IBus>()->GetBus());
+            return new UGyro(slc->resolve<IBus>()->getBus());
         }).asSingleton();
     }
 };

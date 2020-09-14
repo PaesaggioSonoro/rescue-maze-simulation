@@ -2,8 +2,6 @@
 
 #pragma once
 
-
-#include "UObject/ConstructorHelpers.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Cell.generated.h"
@@ -21,15 +19,14 @@ public:
 
 protected:
     // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
+    void BeginPlay() override;
 
 
 public:
     // Called every frame
-    virtual void Tick(float DeltaTime) override;
-    void Build(std::vector<int> walls, UMaterialInterface* material, bool temp);
+    void Tick(float DeltaTime) override;
+    void Build(std::vector<int> Walls, UMaterialInterface* Material, bool bTemp);
 
 private:
-    int points[4][2] = {{30, 30}, {30, 0}, {0, 0}, {0, 30}};
-    UStaticMeshComponent* BaseMesh;
+    int Points[4][2] = {{30, 30}, {30, 0}, {0, 0}, {0, 30}};
 };

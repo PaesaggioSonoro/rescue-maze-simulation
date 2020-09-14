@@ -11,7 +11,7 @@ public:
     {
         bind<ITemp>().to<UTemp>([](SLContext_sptr slc)
         {
-            return new UTemp(slc->resolve<IBus>()->GetBus());
+            return new UTemp(slc->resolve<IBus>()->getBus());
         });
     }
 };

@@ -7,6 +7,6 @@ class UBus : public IBus
 public:
     UBus();
     DrivableActor* Bus = nullptr;
-    void SetBus(DrivableActor* Actor) override;
-    DrivableActor* GetBus() override;
+    void setBus(DrivableActor* Actor) override;
+    DrivableActor* getBus() override;
 };

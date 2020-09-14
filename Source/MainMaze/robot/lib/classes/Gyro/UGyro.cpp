@@ -1,9 +1,10 @@
-﻿#include "UGyro.hpp"
+﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
+#include "UGyro.hpp"
 
 
-UGyro::UGyro(DrivableActor* actor)
+UGyro::UGyro(DrivableActor* Actor)
 {
-    this->actor = actor;
+    this->Actor = Actor;
 }
 
 void UGyro::start(unsigned long refresh)
@@ -12,35 +13,35 @@ void UGyro::start(unsigned long refresh)
 
 float UGyro::yaw()
 {
-    return actor->GetActor()->GetActorRotation().Yaw + CalculateError();
+    return Actor->GetActor()->GetActorRotation().Yaw + CalculateError();
 }
 
 float UGyro::roll()
 {
-    return actor->GetActor()->GetActorRotation().Roll + CalculateError();
+    return Actor->GetActor()->GetActorRotation().Roll + CalculateError();
 }
 
 float UGyro::pitch()
 {
-    return actor->GetActor()->GetActorRotation().Pitch + CalculateError();
+    return Actor->GetActor()->GetActorRotation().Pitch + CalculateError();
 }
 
 void UGyro::calibrate()
 {
-    max_error = 0.0;
+    Max_Error = 0.0;
 }
 
 float UGyro::CalculateError()
 {
-    if (error)
+    if (bError)
     {
         srand(static_cast<int>(time(nullptr)));
-        auto now = high_resolution_clock::now();
-        auto nanos = duration_cast<nanoseconds>(now.time_since_epoch()).count();
+        const auto now = high_resolution_clock::now();
+        const auto nanos = duration_cast<nanoseconds>(now.time_since_epoch()).count();
         srand(nanos);
-        max_error += ((rand() % 100) - 50) / (500.0 * (1 / drift));
+        Max_Error += ((rand() % 100) - 50) / (500.0 * (1 / Drift));
 
-        return max_error;
+        return Max_Error;
     }
     return 0.0;
 }

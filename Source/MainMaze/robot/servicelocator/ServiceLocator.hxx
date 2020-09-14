@@ -114,7 +114,7 @@ public:
 
         std::string getTypeName(const std::type_index& typeIndex) const
         {
-            int status=0;
+            int status = 0;
             // auto s = __cxxabiv1::__cxa_demangle (typeIndex.name(), nullptr, nullptr, &status);
             auto s = typeIndex.name();
             std::string result;
@@ -160,7 +160,7 @@ public:
                 {
                     for (auto fn : *_fnAfterResolveList)
                     {
-                        auto ctx = sptr<Context>(new Context(_sl));
+                        auto ctx = std::make_shared<Context>(_sl);
                         fn(ctx);
                     }
                     delete _fnAfterResolveList;
@@ -199,7 +199,7 @@ public:
         {
             if (_interfaceTypeName == nullptr)
             {
-                _interfaceTypeName = uptr<std::string>(new std::string(getTypeName(_interfaceType)));
+                _interfaceTypeName = std::make_unique<std::string>(getTypeName(_interfaceType));
             }
             return *_interfaceTypeName;
         }
@@ -215,14 +215,14 @@ public:
             {
                 throw BindingIssueException("Concrete type on Context already set");
             }
-            _concreteType = uptr<std::type_index>(new std::type_index(concreteType));
+            _concreteType = std::make_unique<std::type_index>(concreteType);
         }
 
         const std::string& getConcreteTypeName() const
         {
             if (_concreteTypeName == nullptr)
             {
-                _concreteTypeName = uptr<std::string>(new std::string(getTypeName(*_concreteType)));
+                _concreteTypeName = std::make_unique<std::string>(getTypeName(*_concreteType));
             }
             return *_concreteTypeName;
         }
@@ -246,7 +246,7 @@ public:
         template <class IFace>
         sptr<IFace> resolve(const std::string& named)
         {
-            auto ctx = sptr<Context>(new Context(this, std::type_index(typeid(IFace)), named));
+            auto ctx = std::make_shared<Context>(this, std::type_index(typeid(IFace)), named);
             checkRecursiveResolve(ctx.get(), this);
             auto ptr = _sl.lock()->_resolve<IFace>(ctx);
             afterResolve();
@@ -257,7 +257,7 @@ public:
         template <class IFace>
         sptr<IFace> resolve()
         {
-            auto ctx = sptr<Context>(new Context(this, std::type_index(typeid(IFace)), ""));
+            auto ctx = std::make_shared<Context>(this, std::type_index(typeid(IFace)), "");
             checkRecursiveResolve(ctx.get(), this);
             auto ptr = _sl.lock()->_resolve<IFace>(ctx);
             afterResolve();
@@ -270,7 +270,7 @@ public:
             _sl.lock()->_visitAll<IFace>(
                 [this, all](sptr<typename TypedServiceLocator<IFace>::shared_ptr_binding> binding)
                 {
-                    auto ctx = sptr<Context>(new Context(this, std::type_index(typeid(IFace)), ""));
+                    auto ctx = std::make_shared<Context>(this, std::type_index(typeid(IFace)), "");
                     checkRecursiveResolve(ctx.get(), this);
                     all->push_back(binding->get(ctx));
                 });
@@ -281,7 +281,7 @@ public:
         template <class IFace>
         bool canResolve(const std::string& named)
         {
-            auto ctx = sptr<Context>(new Context(this, std::type_index(typeid(IFace)), named));
+            auto ctx = std::make_shared<Context>(this, std::type_index(typeid(IFace)), named);
             return _sl.lock()->_canResolve<IFace>(ctx);
         }
 
@@ -289,7 +289,7 @@ public:
         template <class IFace>
         bool canResolve()
         {
-            auto ctx = sptr<Context>(new Context(this, std::type_index(typeid(IFace)), ""));
+            auto ctx = std::make_shared<Context>(this, std::type_index(typeid(IFace)), "");
             return _sl.lock()->_canResolve<IFace>(ctx);
         }
 
@@ -297,7 +297,7 @@ public:
         template <class IFace>
         sptr<IFace> tryResolve(const std::string& named)
         {
-            auto ctx = sptr<Context>(new Context(this, std::type_index(typeid(IFace)), named));
+            auto ctx = std::make_shared<Context>(this, std::type_index(typeid(IFace)), named);
             checkRecursiveResolve(ctx.get(), this);
             auto ptr = _sl.lock()->_tryResolve<IFace>(ctx);
             afterResolve();
@@ -308,7 +308,7 @@ public:
         template <class IFace>
         sptr<IFace> tryResolve()
         {
-            auto ctx = sptr<Context>(new Context(this, std::type_index(typeid(IFace)), ""));
+            auto ctx = std::make_shared<Context>(this, std::type_index(typeid(IFace)), "");
             checkRecursiveResolve(ctx.get(), this);
             auto ptr = _sl.lock()->_tryResolve<IFace>(ctx);
             afterResolve();
@@ -323,7 +323,7 @@ public:
             auto sl = _sl.lock();
             return [sl](const std::string& name = "")
             {
-                auto ctx = sptr<Context>(new Context(sl, std::type_index(typeid(IFace)), name));
+                auto ctx = std::make_shared<Context>(sl, std::type_index(typeid(IFace)), name);
                 // Don't need to check for recursive resolve since this is a provider (root) call
                 auto ptr = sl->_resolve<IFace>(ctx);
                 // ctx is root Context, it can afterResolve
@@ -340,7 +340,7 @@ public:
             auto sl = _sl.lock();
             return [sl](const std::string& name = "")
             {
-                auto ctx = sptr<Context>(new Context(sl, std::type_index(typeid(IFace)), name));
+                auto ctx = std::make_shared<Context>(sl, std::type_index(typeid(IFace)), name);
                 // Don't need to check for recursive resolve since this is a tryProvider (root) call
                 auto ptr = sl->_tryResolve<IFace>(ctx);
                 // ctx is root Context, it can afterResolve
@@ -498,7 +498,7 @@ private:
                     _ibinding->_fnGet = _ibinding->_fnCreate = [](sptr<Context> slc)
                     {
                         slc->setConcreteType(std::type_index(typeid(IFace)));
-                        return sptr<IFace>(new IFace(slc));
+                        return std::make_shared<IFace>(slc);
                     };
                     return _ibinding->_as_clause;
                 }
@@ -508,7 +508,7 @@ private:
                     _ibinding->_fnGet = _ibinding->_fnCreate = [](sptr<Context> slc)
                     {
                         slc->setConcreteType(std::type_index(typeid(IFace)));
-                        return sptr<IFace>(new IFace());
+                        return std::make_shared<IFace>();
                     };
                     return _ibinding->_as_clause;
                 }
@@ -519,7 +519,7 @@ private:
                     _ibinding->_fnGet = _ibinding->_fnCreate = [](sptr<Context> slc)
                     {
                         slc->setConcreteType(std::type_index(typeid(TImpl)));
-                        return sptr<TImpl>(new TImpl(slc));
+                        return std::make_shared<TImpl>(slc);
                     };
                     return _ibinding->_as_clause;
                 }
@@ -530,7 +530,7 @@ private:
                     _ibinding->_fnGet = _ibinding->_fnCreate = [](sptr<Context> slc)
                     {
                         slc->setConcreteType(std::type_index(typeid(TImpl)));
-                        return sptr<TImpl>(new TImpl());
+                        return std::make_shared<TImpl>();
                     };
                     return _ibinding->_as_clause;
                 }
@@ -611,7 +611,7 @@ private:
 
             void eagerBind(sptr<Context> slc) override
             {
-                auto ctx = sptr<Context>(new Context(slc.get(), std::type_index(typeid(IFace)), ""));
+                auto ctx = std::make_shared<Context>(slc.get(), std::type_index(typeid(IFace)), "");
                 _fnGet(ctx);
             }
         };
@@ -627,7 +627,7 @@ private:
                     std::string("Duplicate binding for <") + typeid(IFace).name() + "> named " + name);
             }
 
-            auto binding = sptr<shared_ptr_binding>(new shared_ptr_binding(eagerBindings));
+            auto binding = std::make_shared<shared_ptr_binding>(eagerBindings);
 
             // (non const) IFace binding
             _bindings.insert(std::pair<std::string, sptr<loose_binding>>(name, binding));
@@ -652,7 +652,7 @@ private:
             return ibinding->get(slc);
         }
 
-        void visitAll(std::function<void(sptr<TypedServiceLocator<IFace>::shared_ptr_binding>)> fnVisit)
+        void visitAll(std::function<void(sptr<shared_ptr_binding>)> fnVisit)
         {
             for (auto binding : _bindings)
             {
@@ -802,7 +802,7 @@ public:
         // instances from a raw pointer you will crash on 2nd shared_ptr going out of scope and deleting
         // the instance which has already been deleted by the 1st shared_ptr going out of scope
         slp->_this = slp;
-        slp->_context = sptr<Context>(new Context(slp));
+        slp->_context = std::make_shared<Context>(slp);
 
         return slp;
     }
@@ -817,7 +817,7 @@ public:
     {
         auto slp = sptr<ServiceLocator>(new ServiceLocator(sptr<ServiceLocator>(_this)));
         slp->_this = slp;
-        slp->_context = sptr<Context>(new Context(slp));
+        slp->_context = std::make_shared<Context>(slp);
         return slp;
     }
 
@@ -864,6 +864,7 @@ public:
         sptr<ServiceLocator> _sl;
 
     public:
+        virtual ~Module() = default;
         // Create a named binding
         template <class IFace>
         typename TypedServiceLocator<IFace>::shared_ptr_binding::to_clause& bind(const std::string& named)
@@ -907,7 +908,7 @@ public:
             return *this;
         }
 
-        module_clause& add(ServiceLocator::Module&& module)
+        module_clause& add(Module&& module)
         {
             module._sl = _sl;
 
@@ -916,7 +917,7 @@ public:
             return *this;
         }
 
-        module_clause& add(ServiceLocator::Module& module)
+        module_clause& add(Module& module)
         {
             module._sl = _sl;
 
@@ -932,7 +933,7 @@ public:
     {
         if (_module_clause == nullptr)
         {
-            _module_clause = sptr<module_clause>(new module_clause(sptr<ServiceLocator>(_this)));
+            _module_clause = std::make_shared<module_clause>(sptr<ServiceLocator>(_this));
         }
         return *_module_clause;
     }

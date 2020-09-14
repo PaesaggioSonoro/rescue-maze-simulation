@@ -12,7 +12,7 @@ ACell::ACell()
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
-    BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
+    UStaticMeshComponent* BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
     RootComponent = BaseMesh;
 
     static ConstructorHelpers::FObjectFinder<UStaticMesh> BaseAsset(TEXT("/Game/Cell/Assets/Floor_BSP.Floor_BSP"));
@@ -36,21 +36,21 @@ void ACell::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void ACell::Build(std::vector<int> walls, UMaterialInterface* material, bool temp)
+void ACell::Build(std::vector<int> Walls, UMaterialInterface* Material, bool bTemp)
 {
-    BaseMesh->SetMaterial(0, material);
+    Cast<UStaticMeshComponent>(RootComponent)->SetMaterial(0, Material);
 
-    for (int i = 0; i < walls.size(); i++) // access by reference to avoid copying
+    for (int i = 0; i < Walls.size(); i++) // access by reference to avoid copying
     {
-        if (walls[i] == 1)
+        if (Walls[i] == 1)
         {
             FVector location = GetActorLocation();
-            location.X += points[i][0];
-            location.Y += points[i][1];
+            location.X += Points[i][0];
+            location.Y += Points[i][1];
             FTransform Transform = FTransform(location);
             Transform.SetRotation(FRotator(0, -90 * (i + 1), 0).Quaternion());
             AWall* wall = GetWorld()->SpawnActorDeferred<AWall>(AWall::StaticClass(), Transform);
-            wall->temp = temp ? 40 : 25;
+            wall->temp = bTemp ? 40 : 25;
             UGameplayStatics::FinishSpawningActor(wall, wall->GetTransform());
         }
     }

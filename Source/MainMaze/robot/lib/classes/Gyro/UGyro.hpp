@@ -10,7 +10,7 @@ using namespace std::chrono;
 class UGyro : public IGyro
 {
 public:
-    UGyro(DrivableActor* actor);
+    UGyro(DrivableActor* Actor);
     void start(unsigned long refresh) override;
     float yaw() override;
     float roll() override;
@@ -18,9 +18,9 @@ public:
     void calibrate() override;
 
 private:
-    float drift = 1;
-    bool error = false;
-    DrivableActor* actor;
+    float Drift = 1;
+    bool bError = false;
+    DrivableActor* Actor;
     float CalculateError();
-    float max_error = 0.0;
+    float Max_Error = 0.0;
 };

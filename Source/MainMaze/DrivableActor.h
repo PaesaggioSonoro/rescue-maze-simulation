@@ -5,8 +5,11 @@
 class DrivableActor
 {
 public:
+    virtual ~DrivableActor() = default;
 
     virtual AActor* GetActor() = 0;
+
+    virtual FVector GetSize() const = 0;
 
     // Actuation
     virtual void SetSpeedR(int speed) = 0;
