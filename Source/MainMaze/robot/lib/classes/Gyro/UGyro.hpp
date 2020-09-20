@@ -10,7 +10,7 @@ using namespace std::chrono;
 class UGyro : public IGyro
 {
 public:
-    UGyro(DrivableActor* Actor);
+    UGyro(DrivableActor* DrivableActor);
     void start(unsigned long refresh) override;
     float yaw() override;
     float roll() override;

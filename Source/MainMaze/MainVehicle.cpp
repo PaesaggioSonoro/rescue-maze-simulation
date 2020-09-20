@@ -58,11 +58,6 @@ AActor* AMainVehicle::GetActor()
     return Cast<AActor>(this);
 }
 
-FVector AMainVehicle::GetSize() const
-{
-    return Size;
-}
-
 void AMainVehicle::SetSpeedR(int Speed)
 {
     this->Speed_R = Speed;
@@ -101,31 +96,31 @@ float AMainVehicle::GetAngle(float L1, float L2, float Radius)
 
 void AMainVehicle::Move(float Time)
 {
-    float l1 = GetDistance(Speed_R, Time);
-    float l2 = GetDistance(Speed_L, Time);
-    float radius = GetRadius(l1, l2);
-    float angle = GetAngle(l1, l2, radius);
-    radius += R;
+    float L1 = GetDistance(Speed_R, Time);
+    float L2 = GetDistance(Speed_L, Time);
+    float Radius = GetRadius(L1, L2);
+    float Angle = GetAngle(L1, L2, Radius);
+    Radius += R;
     float x = GetActorLocation().X, y = GetActorLocation().Y, z = GetActorLocation().Z;
 
-    FRotator rotator = GetActorRotation();
+    FRotator Rotator = GetActorRotation();
 
 
-    Point pivot, center;
+    Point Pivot, Center;
 
-    if (radius == 0.0)
+    if (Radius == 0.0)
     {
-        pivot = Point(x, y);
-        center = Point(x + l1, y);
-        center.rotate(pivot, GetActorRotation().Yaw);
+        Pivot = Point(x, y);
+        Center = Point(x + L1, y);
+        Center.rotate(Pivot, GetActorRotation().Yaw);
     }
     else
     {
-        pivot = Point(x, y + radius);
-        center = Point(x, y);
-        pivot.rotate(center, GetActorRotation().Yaw);
-        center.rotate(pivot, angle);
-        rotator.Yaw += angle;
+        Pivot = Point(x, y + Radius);
+        Center = Point(x, y);
+        Pivot.rotate(Center, GetActorRotation().Yaw);
+        Center.rotate(Pivot, Angle);
+        Rotator.Yaw += Angle;
     }
 
 
@@ -133,10 +128,10 @@ void AMainVehicle::Move(float Time)
     {
         UE_LOG(LogTemp, Warning, TEXT("delta time: %f"), Time);
         UE_LOG(LogTemp, Warning, TEXT("speed_L %d, speed_R: %d, l1: %f, l2: %f, radius: %f, angle: %f"), Speed_L,
-               Speed_R, l1, l2, radius, angle);
+               Speed_R, L1, L2, Radius, Angle);
 
-        DrawDebugPoint(GetWorld(), FVector(center.x, center.y, Height), 2, FColor::Blue, false, 8.f);
-        DrawDebugPoint(GetWorld(), FVector(pivot.x, pivot.y, Height), 10, FColor::Red, false, 2.f);
+        DrawDebugPoint(GetWorld(), FVector(Center.x, Center.y, Height), 2, FColor::Blue, false, 8.f);
+        DrawDebugPoint(GetWorld(), FVector(Pivot.x, Pivot.y, Height), 10, FColor::Red, false, 2.f);
         Point lw = Point(x, y - R);
         Point rw = Point(x, y + R);
         lw.rotate(Point(x, y), GetActorRotation().Yaw);
@@ -146,11 +141,11 @@ void AMainVehicle::Move(float Time)
 
         UE_LOG(LogTemp, Warning, TEXT("pos: %f, %f, %f"), x, y, z);
 
-        UE_LOG(LogTemp, Warning, TEXT("pivot: %f, %f"), pivot.x, pivot.y);
+        UE_LOG(LogTemp, Warning, TEXT("pivot: %f, %f"), Pivot.x, Pivot.y);
 
-        UE_LOG(LogTemp, Warning, TEXT("center: %f, %f"), center.x, center.y);
+        UE_LOG(LogTemp, Warning, TEXT("center: %f, %f"), Center.x, Center.y);
     }
 
-    FVector location = center.toVector(Height);
-    SetActorLocationAndRotation(location, rotator, false, nullptr, ETeleportType::None);
+    FVector location = Center.toVector(Height);
+    SetActorLocationAndRotation(location, Rotator, false, nullptr, ETeleportType::None);
 }

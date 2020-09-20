@@ -5,12 +5,12 @@
 class UTemp : public ITemp
 {
 public:
-    UTemp(DrivableActor* actor);
+    UTemp(DrivableActor* DrivableActor);
     void calibrate() override;
     GeometricPair<float> read() override;
     GeometricPair<bool> isHot() override;
 
 private:
-    DrivableActor* actor;
-    float readSide(FVector direction);
+    DrivableActor* Actor;
+    float ReadSide(FVector Direction);
 };

@@ -3,12 +3,15 @@
 #pragma once
 
 #define _USE_MATH_DEFINES
-#define WHEEL_CIRC 168.075206967
-#define MAX_SPEED 173.677713866
+#define WHEEL_CIRC 16.8075206967
+#define MAX_SPEED 17.3677713866
 
 #include "CoreMinimal.h"
 #include "Point.h"
 #include "DrivableActor.h"
+#include "robot/utils/Constants.hxx"
+
+
 #include "MainVehicle.generated.h"
 
 UCLASS()
@@ -46,8 +49,6 @@ public:
 
     AActor* GetActor() override;
 
-    FVector GetSize() const override;
-
     void SetSpeedR(int Speed) override;
     void SetSpeedL(int Speed) override;
     void SetSpeed(int SpeedL, int SpeedR) override;
@@ -55,9 +56,8 @@ public:
 private:
 
     float Height;
-    const FVector Size = FVector(20, 15, 12);
-    const float D = Size.Y; // distanza tra ruote
-    const float R = Size.Y / 2; // D/2
+    const float D = Dimensions::width; // distanza tra ruote
+    const float R = Dimensions::width / 2; // D/2
     const float TO_DEGREES = 180 / M_PI;
 
     float GetDistance(int Speed, float Time);

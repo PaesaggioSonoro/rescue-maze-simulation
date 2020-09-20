@@ -2,9 +2,9 @@
 #include "UGyro.hpp"
 
 
-UGyro::UGyro(DrivableActor* Actor)
+UGyro::UGyro(DrivableActor* DrivableActor)
 {
-    this->Actor = Actor;
+    this->Actor = DrivableActor;
 }
 
 void UGyro::start(unsigned long refresh)

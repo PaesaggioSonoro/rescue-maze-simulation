@@ -4,9 +4,8 @@
 #include "MainMaze/Wall.h"
 
 
-UTemp::UTemp(DrivableActor* actor)
+UTemp::UTemp(DrivableActor* DrivableActor) : Actor(DrivableActor)
 {
-    this->actor = actor;
 }
 
 void UTemp::calibrate()
@@ -18,8 +17,8 @@ void UTemp::calibrate()
 GeometricPair<float> UTemp::read()
 {
     auto out = GeometricPair<float>(
-        readSide(actor->GetActor()->GetActorRightVector().MirrorByVector(FVector::RightVector)),
-        readSide(actor->GetActor()->GetActorRightVector())
+        ReadSide(Actor->GetActor()->GetActorRightVector().MirrorByVector(FVector::RightVector)),
+        ReadSide(Actor->GetActor()->GetActorRightVector())
     );
     return out;
 }
@@ -33,23 +32,23 @@ GeometricPair<bool> UTemp::isHot()
     );
 }
 
-float UTemp::readSide(FVector direction)
+float UTemp::ReadSide(FVector Direction)
 {
     FHitResult OutHit;
 
-    FVector Start = actor->GetActor()->GetActorLocation();
+    FVector Start = Actor->GetActor()->GetActorLocation();
 
-    FVector End = (Start + (direction * 1000.0f));
+    FVector End = (Start + (Direction * 1000.0f));
 
     FCollisionQueryParams CollisionParams;
 
-    bool isHit = actor->GetActor()->GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility,
+    bool isHit = Actor->GetActor()->GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility,
                                                                          CollisionParams);
     float result = 0;
     if (isHit)
     {
-        AWall* wall = Cast<AWall>(OutHit.GetActor());
-        if (wall) result = wall->temp;
+        AWall* Wall = Cast<AWall>(OutHit.GetActor());
+        if (Wall) result = Wall->temp;
         // if (wall) result = (OutHit.Distance < 30) ? wall->temp : 25;
     }
     return result;

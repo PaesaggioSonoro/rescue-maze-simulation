@@ -1,29 +1,51 @@
 ﻿#include "Robot.hpp"
 
 
-#include "lib/interfaces/ITemp.hh"
+#include "lib/interfaces/IDriver.hh"
+#include "lib/interfaces/ILasers.hh"
 #include "servicelocator/RobotServiceLocator.hpp"
 #include "MainMaze/robot/lib/interfaces/IBus.hh"
-#include "MainMaze/robot/lib/interfaces/IGyro.hh"
 
 void Robot::setup()
 {
     auto& rsl = RobotServiceLocator::instance();
-    UE_LOG(LogTemp, Warning, TEXT("YAW: %f"), rsl.sl()->getContext()->resolve<IGyro>()->yaw());
 
-    sptr<ITemp> temp = rsl.sl()->getContext()->resolve<ITemp>();
-    temp->calibrate();
+    sptr<ILasers> lasers = rsl.sl()->getContext()->resolve<ILasers>();
     if (GEngine)
     {
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
-                                         FString::Printf(TEXT("Distance R: %f"), temp->read().right));
+                                         FString::Printf(TEXT("Distance F: %f"), lasers->readF()));
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
-                                         FString::Printf(TEXT("Distance L: %f"), temp->read().left));
+                                         FString::Printf(TEXT("Distance FR: %f"), lasers->readFR()));
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
-                                         FString::Printf(TEXT("Distance R: %d"), temp->isHot().right));
+                                         FString::Printf(TEXT("Distance FL: %f"), lasers->readFL()));
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
-                                         FString::Printf(TEXT("Distance L: %d"), temp->isHot().left));
+                                         FString::Printf(TEXT("Distance R: %f"), lasers->readR()));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance L: %f"), lasers->readL()));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance B: %f"), lasers->readB()));
     }
+
+    sptr<IDriver> driver = rsl.sl()->getContext()->resolve<IDriver>();
+    driver->rotate(false);
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance F: %f"), lasers->readF()));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance FR: %f"), lasers->readFR()));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance FL: %f"), lasers->readFL()));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance R: %f"), lasers->readR()));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance L: %f"), lasers->readL()));
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
+                                         FString::Printf(TEXT("Distance B: %f"), lasers->readB()));
+    }
+    // driver->go();
+    // driver->rotate(true);
 }
 
 void Robot::main()
