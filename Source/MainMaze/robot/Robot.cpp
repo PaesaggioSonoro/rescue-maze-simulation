@@ -44,8 +44,14 @@ void Robot::setup()
         GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
                                          FString::Printf(TEXT("Distance B: %f"), lasers->readB()));
     }
-    // driver->go();
-    // driver->rotate(true);
+    driver->go();
+    driver->rotate(true);
+    driver->go();
+    driver->go();
+    driver->rotate(false);
+    driver->go();
+    driver->rotate(true);
+    driver->go();
 }
 
 void Robot::main()

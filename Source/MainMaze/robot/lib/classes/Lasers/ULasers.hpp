@@ -17,5 +17,5 @@ public:
 private:
     DrivableActor* Actor;
     // float Read(FVector Vector, FVector Direction);
-    float Read(FVector Direction, float DeltaY);
+    float Read(FVector Direction, float DeltaY = 0);
 };

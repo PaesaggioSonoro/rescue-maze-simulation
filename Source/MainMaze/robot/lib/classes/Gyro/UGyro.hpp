@@ -19,7 +19,7 @@ public:
 
 private:
     float Drift = 1;
-    bool bError = false;
+    bool bError = true;
     DrivableActor* Actor;
     float CalculateError();
     float Max_Error = 0.0;
