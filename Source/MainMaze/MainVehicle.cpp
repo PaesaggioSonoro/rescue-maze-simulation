@@ -5,32 +5,12 @@
 
 #include "DrawDebugHelpers.h"
 
-// Fill out your copyright notice in the Description page of Project Settings.
-
-/*int AMainVehicle::speed_R = 255;
-int AMainVehicle::speed_L = 255;*/
-
 // Sets default values
 AMainVehicle::AMainVehicle()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 }
-
-/*void AMainVehicle::SetSpeedLeft(const int delta)
-{
-	speed_L += delta;
-}
-
-void AMainVehicle::SetSpeedRight(const int delta)
-{
-	speed_R += delta;
-}
-
-FString AMainVehicle::GetSpeed()
-{
-	return FString::Printf(TEXT("L: %d    R: %d"), speed_L, speed_R);
-}*/
 
 void AMainVehicle::Brake()
 {
@@ -42,7 +22,6 @@ void AMainVehicle::Brake()
 void AMainVehicle::BeginPlay()
 {
     Super::BeginPlay();
-    //if (UseThread) (new FAutoDeleteAsyncTask<ThreadClass>(UpperLimit, this))->StartBackgroundTask();
     Height = GetActorLocation().Z;
 }
 
@@ -60,18 +39,18 @@ AActor* AMainVehicle::GetActor()
 
 void AMainVehicle::SetSpeedR(int Speed)
 {
-    this->Speed_R = Speed;
+    this->Speed_R = Speed + CalculateError();
 }
 
 void AMainVehicle::SetSpeedL(int Speed)
 {
-    this->Speed_L = Speed;
+    this->Speed_L = Speed + CalculateError();
 }
 
 void AMainVehicle::SetSpeed(int SpeedL, int SpeedR)
 {
-    this->Speed_L = SpeedL;
-    this->Speed_R = SpeedR;
+    this->SetSpeedL(SpeedL);
+    this->SetSpeedR(SpeedR);
 }
 
 float AMainVehicle::GetDistance(int Speed, float Time)
@@ -82,7 +61,7 @@ float AMainVehicle::GetDistance(int Speed, float Time)
 float AMainVehicle::GetRadius(float L1, float L2)
 {
     if (L1 == L2) return -R;
-    return (-L1 * D) / (L1 - L2);
+    return (-L1 * D) / (L1 - L2); // L1 / r = L2 / (r + D) 
 }
 
 float AMainVehicle::GetAngle(float L1, float L2, float Radius)
@@ -96,22 +75,20 @@ float AMainVehicle::GetAngle(float L1, float L2, float Radius)
 
 void AMainVehicle::Move(float Time)
 {
-    float L1 = GetDistance(Speed_R, Time);
-    float L2 = GetDistance(Speed_L, Time);
-    float Radius = GetRadius(L1, L2);
-    float Angle = GetAngle(L1, L2, Radius);
-    Radius += R;
+    float L1 = GetDistance(Speed_R, Time); // First Arch (rightmost)
+    float L2 = GetDistance(Speed_L, Time); // Second Arch (leftmost)
+    float Radius = GetRadius(L1, L2); // Radius (referring to right)
+    float Angle = GetAngle(L1, L2, Radius); // Absolute Angle
+    Radius += R; // Make Radius referring to Center
     float x = GetActorLocation().X, y = GetActorLocation().Y, z = GetActorLocation().Z;
 
     FRotator Rotator = GetActorRotation();
-
-
     Point Pivot, Center;
 
-    if (Radius == 0.0)
+    if (Radius == 0.0) // Moving forward or rotating in place
     {
         Pivot = Point(x, y);
-        Center = Point(x + L1, y);
+        Center = Point(x + (L1 + L2) / 2.0, y);
         Center.rotate(Pivot, GetActorRotation().Yaw);
     }
     else
@@ -120,8 +97,8 @@ void AMainVehicle::Move(float Time)
         Center = Point(x, y);
         Pivot.rotate(Center, GetActorRotation().Yaw);
         Center.rotate(Pivot, Angle);
-        Rotator.Yaw += Angle;
     }
+    Rotator.Yaw += Angle;
 
 
     if (EnableDebug)

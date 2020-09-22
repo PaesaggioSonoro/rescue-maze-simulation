@@ -16,12 +16,12 @@ void UDriver::rotate(bool right)
     float Angle = Gyro->yaw();
     if (right)
     {
-        Actor->SetSpeed(50, -49);
+        Actor->SetSpeed(50, -50);
         while (Gyro->yaw() < Angle + 80)
         {
             FPlatformProcess::Sleep(0.1);
         }
-        Actor->SetSpeed(10, -9);
+        Actor->SetSpeed(10, -10);
         while (Gyro->yaw() < Angle + 90)
         {
             FPlatformProcess::Sleep(0.1);
@@ -29,12 +29,12 @@ void UDriver::rotate(bool right)
     }
     else
     {
-        Actor->SetSpeed(-49, 50);
+        Actor->SetSpeed(-50, 50);
         while (Gyro->yaw() > Angle - 80)
         {
             FPlatformProcess::Sleep(0.1);
         }
-        Actor->SetSpeed(-9, 10);
+        Actor->SetSpeed(-10, 10);
         while (Gyro->yaw() > Angle - 90)
         {
             FPlatformProcess::Sleep(0.1);
@@ -50,7 +50,7 @@ void UDriver::go()
     float Start = Lasers->readF();
     float Angle = Gyro->yaw();
     if (Start < 30.0) return;
-    Actor->SetSpeed(80, 80);
+    Actor->SetSpeed(100, 100);
     while (Lasers->readF() > Start - 30)
     {
         float CurrentYaw = Gyro->yaw();

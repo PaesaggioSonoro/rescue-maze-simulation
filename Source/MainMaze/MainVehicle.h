@@ -64,5 +64,10 @@ private:
     float GetRadius(float L1, float L2);
     float GetAngle(float L1, float L2, float Radius);
 
+    float CalculateError() // TODO: implement
+    {
+        return 0.0;
+    }
+
     void Move(float Time);
 };
