@@ -13,17 +13,17 @@ void UGyro::start(unsigned long refresh)
 
 float UGyro::yaw()
 {
-    return Actor->GetActor()->GetActorRotation().Yaw + CalculateError();
+    return FRotator::ClampAxis(Actor->GetActor()->GetActorRotation().Yaw + CalculateError());
 }
 
 float UGyro::roll()
 {
-    return Actor->GetActor()->GetActorRotation().Roll + CalculateError();
+    return FRotator::ClampAxis(Actor->GetActor()->GetActorRotation().Roll + CalculateError());
 }
 
 float UGyro::pitch()
 {
-    return Actor->GetActor()->GetActorRotation().Pitch + CalculateError();
+    return FRotator::ClampAxis(Actor->GetActor()->GetActorRotation().Pitch + CalculateError());
 }
 
 void UGyro::calibrate()

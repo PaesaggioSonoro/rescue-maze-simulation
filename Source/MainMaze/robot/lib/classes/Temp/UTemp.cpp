@@ -17,7 +17,7 @@ void UTemp::calibrate()
 GeometricPair<float> UTemp::read()
 {
     auto out = GeometricPair<float>(
-        ReadSide(Actor->GetActor()->GetActorRightVector().MirrorByVector(FVector::RightVector)),
+        ReadSide(Actor->GetActor()->GetActorRightVector() * -1),
         ReadSide(Actor->GetActor()->GetActorRightVector())
     );
     return out;

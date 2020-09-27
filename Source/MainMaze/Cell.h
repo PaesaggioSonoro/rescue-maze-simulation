@@ -25,7 +25,7 @@ protected:
 public:
     // Called every frame
     void Tick(float DeltaTime) override;
-    void Build(std::vector<int> Walls, UMaterialInterface* Material, bool bTemp);
+    void Build(std::vector<int> Walls, UMaterialInterface* Material, std::vector<int> Temps);
 
 private:
     int Points[4][2] = {{30, 30}, {30, 0}, {0, 0}, {0, 30}};

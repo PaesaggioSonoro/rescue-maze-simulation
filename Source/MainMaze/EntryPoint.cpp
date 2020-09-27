@@ -53,10 +53,15 @@ void AEntryPoint::BeginPlay()
         FVector NewPos = FVector(DISTANCE * Level[i]["coord"][0].GetInt() + Bias_X,
                                  DISTANCE * Level[i]["coord"][1].GetInt() + Bias_Y, HEIGHT + Bias_Z);
         FTransform NewTr = FTransform(NewPos);
-        std::vector<int> v;
+        std::vector<int> Walls;
         for (auto& Val : Level[i]["walls"].GetArray())
         {
-            v.push_back(Val.GetInt());
+            Walls.push_back(Val.GetInt());
+        }
+        std::vector<int> Temps;
+        for (auto& Val : Level[i]["victims"].GetArray())
+        {
+            Temps.push_back(Val.GetInt());
         }
         ACell* a = GetWorld()->SpawnActorDeferred<ACell>(CellToSpawn, NewTr);
 
@@ -75,7 +80,7 @@ void AEntryPoint::BeginPlay()
             Material = BaseMaterial;
         }
 
-        a->Build(v, Material, Level[i]["victim"].GetBool());
+        a->Build(Walls, Material, Temps);
         UGameplayStatics::FinishSpawningActor(a, a->GetTransform());
     }
 
@@ -100,5 +105,9 @@ bool AEntryPoint::GetShowIntro() const { return ShowIntro; }
 void AEntryPoint::StartRobot(const int UpperLimit) const
 {
     DrivableActor* Actor = Cast<AMainVehicle>(CameraActor);
-    if (Actor != nullptr) (new FAutoDeleteAsyncTask<ThreadClass>(UpperLimit, Actor))->StartBackgroundTask();
+    if (Actor != nullptr)
+    {
+        FAutoDeleteAsyncTask<ThreadClass>* task = new FAutoDeleteAsyncTask<ThreadClass>(UpperLimit, Actor);
+        task->StartBackgroundTask();
+    }
 }

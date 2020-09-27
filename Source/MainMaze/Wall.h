@@ -14,6 +14,7 @@ class MAINMAZE_API AWall : public AActor
 public:
     // Sets default values for this actor's properties
     AWall();
+    UPROPERTY(EditAnywhere, Category="Victims Properties")    
     float temp;
 
 protected:
@@ -23,7 +24,4 @@ protected:
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
-
-private:
-    UStaticMeshComponent* BaseMesh;
 };

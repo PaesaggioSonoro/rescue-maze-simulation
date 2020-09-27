@@ -11,4 +11,6 @@ public:
 
 private:
     DrivableActor* Actor;
+    static bool RightTurnCondition(float Start, float Current, float Goal);
+    static bool LeftTurnCondition(float Start, float Current, float Goal);
 };

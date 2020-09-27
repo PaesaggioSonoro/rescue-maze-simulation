@@ -8,7 +8,7 @@ AWall::AWall()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
-    BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
+    UStaticMeshComponent*  BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualRepresentation"));
     RootComponent = BaseMesh;
 
     static ConstructorHelpers::FObjectFinder<UStaticMesh>

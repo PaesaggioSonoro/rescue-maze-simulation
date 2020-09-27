@@ -36,7 +36,7 @@ void ACell::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void ACell::Build(std::vector<int> Walls, UMaterialInterface* Material, bool bTemp)
+void ACell::Build(std::vector<int> Walls, UMaterialInterface* Material, std::vector<int> Temps)
 {
     Cast<UStaticMeshComponent>(RootComponent)->SetMaterial(0, Material);
 
@@ -50,7 +50,7 @@ void ACell::Build(std::vector<int> Walls, UMaterialInterface* Material, bool bTe
             FTransform Transform = FTransform(location);
             Transform.SetRotation(FRotator(0, -90 * (i + 1), 0).Quaternion());
             AWall* wall = GetWorld()->SpawnActorDeferred<AWall>(AWall::StaticClass(), Transform);
-            wall->temp = bTemp ? 40 : 25;
+            wall->temp = Temps[i] ? 40 : 25;
             UGameplayStatics::FinishSpawningActor(wall, wall->GetTransform());
         }
     }

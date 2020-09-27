@@ -6,14 +6,58 @@
     ],
     "start": [
       0,
-      2,
-      7
+      5,
+      2
     ]
   },
   "body": [
     [
       {
         "coord": [
+          1,
+          4
+        ],
+        "walls": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "black": false,
+        "checkpoint": true,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          1,
+          5
+        ],
+        "walls": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
           2,
           2
         ],
@@ -25,7 +69,13 @@
         ],
         "black": false,
         "checkpoint": false,
-        "victim": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
         "ramp": ""
       },
       {
@@ -34,14 +84,20 @@
           3
         ],
         "walls": [
-          0,
+          1,
           0,
           1,
           0
         ],
         "black": false,
         "checkpoint": false,
-        "victim": false,
+        "victims": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "bump": "",
         "ramp": ""
       },
       {
@@ -52,12 +108,18 @@
         "walls": [
           0,
           0,
-          1,
-          1
+          0,
+          0
         ],
         "black": false,
         "checkpoint": false,
-        "victim": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
         "ramp": ""
       },
       {
@@ -67,13 +129,19 @@
         ],
         "walls": [
           0,
-          1,
-          1,
-          1
+          0,
+          0,
+          0
         ],
         "black": false,
         "checkpoint": false,
-        "victim": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
         "ramp": ""
       },
       {
@@ -83,13 +151,19 @@
         ],
         "walls": [
           0,
-          1,
+          0,
           1,
           0
         ],
         "black": false,
         "checkpoint": false,
-        "victim": true,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
         "ramp": ""
       },
       {
@@ -98,30 +172,42 @@
           7
         ],
         "walls": [
+          1,
           0,
-          0,
-          1,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          3,
-          1
-        ],
-        "walls": [
-          1,
-          1,
           1,
           0
         ],
         "black": false,
         "checkpoint": false,
-        "victim": false,
+        "victims": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          2,
+          8
+        ],
+        "walls": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
         "ramp": ""
       },
       {
@@ -130,62 +216,86 @@
           2
         ],
         "walls": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
           0,
           0,
           0,
           0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          3,
+          3
+        ],
+        "walls": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "SMALL",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          3,
+          4
+        ],
+        "walls": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          3,
+          5
+        ],
+        "walls": [
+          0,
+          0,
+          0,
+          1
         ],
         "black": true,
         "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          3,
-          3
-        ],
-        "walls": [
+        "victims": [
           0,
           0,
           0,
           0
         ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          3,
-          4
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          3,
-          5
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
+        "bump": "",
         "ramp": ""
       },
       {
@@ -195,365 +305,371 @@
         ],
         "walls": [
           0,
+          1,
+          0,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
           0,
           0,
           0
         ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
+        "bump": "",
         "ramp": ""
       },
       {
         "coord": [
           3,
-          7
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          4,
-          2
-        ],
-        "walls": [
-          1,
-          1,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          4,
-          3
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          4,
-          4
-        ],
-        "walls": [
-          1,
-          1,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          4,
-          5
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          4,
-          6
-        ],
-        "walls": [
-          1,
-          0,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          4,
-          7
-        ],
-        "walls": [
-          1,
-          0,
-          0,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          5,
-          3
+          8
         ],
         "walls": [
           0,
           1,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          5,
-          4
-        ],
-        "walls": [
-          0,
-          0,
-          1,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          5,
-          5
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          5,
-          6
-        ],
-        "walls": [
-          0,
-          1,
-          1,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          5,
-          7
-        ],
-        "walls": [
-          0,
-          0,
-          1,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          6,
-          3
-        ],
-        "walls": [
-          1,
-          1,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          6,
-          4
-        ],
-        "walls": [
-          1,
-          0,
-          0,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          6,
-          5
-        ],
-        "walls": [
-          0,
-          1,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          6,
-          6
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          6,
-          7
-        ],
-        "walls": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          7,
-          3
-        ],
-        "walls": [
-          1,
-          1,
-          1,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          7,
-          4
-        ],
-        "walls": [
-          1,
-          0,
-          1,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          7,
-          5
-        ],
-        "walls": [
-          1,
-          0,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          7,
-          6
-        ],
-        "walls": [
-          1,
-          0,
-          0,
-          0
-        ],
-        "black": false,
-        "checkpoint": false,
-        "victim": false,
-        "ramp": ""
-      },
-      {
-        "coord": [
-          7,
-          7
-        ],
-        "walls": [
-          1,
-          0,
           0,
           1
         ],
         "black": false,
         "checkpoint": true,
-        "victim": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          4,
+          2
+        ],
+        "walls": [
+          0,
+          1,
+          1,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          4,
+          3
+        ],
+        "walls": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          4,
+          4
+        ],
+        "walls": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          4,
+          5
+        ],
+        "walls": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "BIG",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          4,
+          6
+        ],
+        "walls": [
+          0,
+          1,
+          0,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          4,
+          7
+        ],
+        "walls": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          4,
+          8
+        ],
+        "walls": [
+          1,
+          0,
+          0,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          5,
+          2
+        ],
+        "walls": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          5,
+          3
+        ],
+        "walls": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          5,
+          4
+        ],
+        "walls": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          5,
+          5
+        ],
+        "walls": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          5,
+          6
+        ],
+        "walls": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          6,
+          4
+        ],
+        "walls": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "black": true,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          6,
+          5
+        ],
+        "walls": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
+        "ramp": ""
+      },
+      {
+        "coord": [
+          6,
+          6
+        ],
+        "walls": [
+          1,
+          0,
+          0,
+          1
+        ],
+        "black": false,
+        "checkpoint": false,
+        "victims": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "bump": "",
         "ramp": ""
       }
     ]
