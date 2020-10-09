@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -23,6 +25,14 @@ public:
 
     /*UPROPERTY(EditAnywhere, Category = "Main", meta = (DisplayName = "Multi-threading"))
     bool multithreading;*/
+
+    //COLLISIONS
+    //UPROPERTY(EditAnywhere, Category = "Collisions", meta = (DisplayName = "Main"))
+    //class USphereComponent* Sphere1;
+
+    UPROPERTY(EditAnywhere, Category = "Collisions", meta = (DisplayName = "Main"))
+    class UBoxComponent* Box1;
+
 
 
     //GYRO
@@ -57,4 +67,8 @@ protected:
 public:
     // Called every frame
     void Tick(float DeltaTime) override;
+
+    UFUNCTION()
+    void OnOverlapBegin(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
 };
