@@ -4,6 +4,7 @@
 #include "MainMaze/robot/lib/classes/Driver/MDriver.hxx"
 #include "MainMaze/robot/lib/classes/Gyro/MGyro.hxx"
 #include "MainMaze/robot/lib/classes/Lasers/MLasers.hxx"
+#include "MainMaze/robot/lib/classes/Serial/MSerial.hxx"
 #include "MainMaze/robot/lib/classes/Temp/MTemp.hxx"
 
 
@@ -15,7 +16,8 @@ RobotServiceLocator::RobotServiceLocator()
        .add<MGyro>()
        .add<MTemp>()
        .add<MLasers>()
-       .add<MDriver>();
+       .add<MDriver>()
+       .add<MSerial>();
 }
 
 sptr<ServiceLocator> RobotServiceLocator::sl()
