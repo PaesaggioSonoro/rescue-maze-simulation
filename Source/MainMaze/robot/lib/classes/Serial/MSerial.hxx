@@ -10,7 +10,7 @@ public:
     {
         bind<ISerial>().to<USerial>([](SLContext_sptr /*slc*/)
         {
-            return new USerial("COM3", 9600);
+            return new USerial("COM4", 9600);
         }).asSingleton();
     }
 };

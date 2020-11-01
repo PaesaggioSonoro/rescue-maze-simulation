@@ -11,42 +11,42 @@ ULasers::ULasers(DrivableActor* DrivableActor) : Actor(DrivableActor)
 
 float ULasers::readF()
 {
-    return Read(Actor->GetActor()->GetActorForwardVector()) - Dimensions::depth / 2;
+    return Read(Actor->GetActor()->GetActorForwardVector()) - Dimensions::DEPTH / 2;
 }
 
 float ULasers::computeFrontAngle()
 {
-    return sqrt(pow(readFL() - readFR(), 2) + pow(Dimensions::frontLasersDistance, 2));
+    return sqrt(pow(readFL() - readFR(), 2) + pow(Dimensions::FRONT_LASERS_DISTANCE, 2));
 }
 
 float ULasers::readFL()
 {
-    return Read(Actor->GetActor()->GetActorForwardVector(), -Dimensions::frontLasersDistance / 2)
-        - Dimensions::depth / 2;
+    return Read(Actor->GetActor()->GetActorForwardVector(), -Dimensions::FRONT_LASERS_DISTANCE / 2)
+        - Dimensions::DEPTH / 2;
 }
 
 float ULasers::readFR()
 {
-    return Read(Actor->GetActor()->GetActorForwardVector(), Dimensions::frontLasersDistance / 2)
-        - Dimensions::depth / 2;
+    return Read(Actor->GetActor()->GetActorForwardVector(), Dimensions::FRONT_LASERS_DISTANCE / 2)
+        - Dimensions::DEPTH / 2;
 }
 
 float ULasers::readL()
 {
     return Read(Actor->GetActor()->GetActorRightVector() * -1)
-        - Dimensions::width / 2;
+        - Dimensions::WIDTH / 2;
 }
 
 float ULasers::readR()
 {
     return Read(Actor->GetActor()->GetActorRightVector())
-        - Dimensions::width / 2;
+        - Dimensions::WIDTH / 2;
 }
 
 float ULasers::readB()
 {
     return Read(Actor->GetActor()->GetActorForwardVector() * -1)
-        - Dimensions::depth / 2;
+        - Dimensions::DEPTH / 2;
 }
 
 float ULasers::Read(FVector Direction, float DeltaY)

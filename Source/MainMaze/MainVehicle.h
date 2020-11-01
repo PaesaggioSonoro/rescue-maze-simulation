@@ -56,8 +56,8 @@ public:
 private:
 
     float Height;
-    const float D = Dimensions::width; // distanza tra ruote
-    const float R = Dimensions::width / 2; // D/2
+    const float D = Dimensions::WIDTH; // distanza tra ruote
+    const float R = Dimensions::WIDTH / 2; // D/2
     const float TO_DEGREES = 180 / M_PI;
 
     float GetDistance(int Speed, float Time);
