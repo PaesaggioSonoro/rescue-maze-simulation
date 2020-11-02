@@ -9,11 +9,10 @@
  */
 class MAINMAZE_API ThreadClass : public FNonAbandonableTask
 {
-    int UpLimit;
     DrivableActor* Actor;
 
 public:
-    ThreadClass(int val, DrivableActor* Actor);
+    ThreadClass(DrivableActor* Actor);
 
     FORCEINLINE TStatId GetStatId() const
     {
@@ -21,4 +20,8 @@ public:
     }
 
     void DoWork();
+
+    void RunRobot() const;
+
+    ~ThreadClass();
 };

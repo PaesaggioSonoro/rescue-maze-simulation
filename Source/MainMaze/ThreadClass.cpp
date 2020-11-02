@@ -6,11 +6,13 @@
 #include "MainMaze/robot/Robot.hpp"
 #include "MainMaze/robot/lib/interfaces/IBus.hh"
 #include "robot/servicelocator/RobotServiceLocator.hpp"
+#include "Core/Public/Windows/AllowWindowsPlatformTypes.h"
+#include "Windows.h"
+#include "Core/Public/Windows/HideWindowsPlatformTypes.h"
 
 
-ThreadClass::ThreadClass(int val, DrivableActor* Actor)
+ThreadClass::ThreadClass(DrivableActor* Actor)
 {
-    this->UpLimit = val;
     this->Actor = Actor;
 }
 
@@ -18,25 +20,22 @@ void ThreadClass::DoWork()
 {
     auto& rsl = RobotServiceLocator::instance();
     rsl.sl()->getContext()->resolve<IBus>()->setBus(Actor);
-    Robot().setup();
-    // for (int i=0; i<1000; i++)
-    // for (int32 i = 1; i <= this->UpLimit; i++)
-    // {
-    //     bool isPrime = true;
-    //
-    //     for (int32 j = 2; j <= i / 2; j++)
-    //     {
-    //         if (FMath::Fmod(i, j) == 0)
-    //         {
-    //             isPrime = false;
-    //             break;
-    //         }
-    //     }
-    //
-    //     if (isPrime)
-    //         GLog->Log("Prime number #" + FString::FromInt(i) + ": " + FString::FromInt(i));
-    // }
-    // GLog->Log("--------------------------------------------------------------------");
-    // GLog->Log("End of prime numbers calculation on game thread");
-    // GLog->Log("--------------------------------------------------------------------");
+    RunRobot();
+}
+
+void ThreadClass::RunRobot() const
+{
+    __try
+    {
+        Robot().setup();
+    }
+    __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION)
+    {
+        UE_LOG(LogTemp, Error, TEXT("EXCEPTION_ACCESS_VIOLATION, QUITTING..."));
+    }
+}
+
+ThreadClass::~ThreadClass()
+{
+    UE_LOG(LogTemp, Error, TEXT("CLOSING THREAD"));
 }

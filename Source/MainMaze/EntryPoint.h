@@ -50,7 +50,7 @@ public:
     bool GetShowIntro() const;
 
     UFUNCTION(BlueprintCallable, Category="Robot")
-    void StartRobot(int UpperLimit) const;
+    void StartRobot() const;
 
 
 protected:

@@ -102,12 +102,12 @@ void AEntryPoint::Tick(float DeltaTime) // DISABLED
 
 bool AEntryPoint::GetShowIntro() const { return ShowIntro; }
 
-void AEntryPoint::StartRobot(const int UpperLimit) const
+void AEntryPoint::StartRobot() const
 {
     DrivableActor* Actor = Cast<AMainVehicle>(CameraActor);
     if (Actor != nullptr)
     {
-        FAutoDeleteAsyncTask<ThreadClass>* task = new FAutoDeleteAsyncTask<ThreadClass>(UpperLimit, Actor);
+        FAutoDeleteAsyncTask<ThreadClass>* task = new FAutoDeleteAsyncTask<ThreadClass>(Actor);
         task->StartBackgroundTask();
     }
 }
