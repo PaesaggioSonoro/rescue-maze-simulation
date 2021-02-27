@@ -1,16 +1,16 @@
 {
-	"FileVersion": 3,
-	"EngineAssociation": "4.25",
-	"Category": "",
-	"Description": "",
-	"Modules": [
-		{
-			"Name": "MainMaze",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine"
-			]
+  "FileVersion": 3,
+  "EngineAssociation": "4.26",
+  "Category": "",
+  "Description": "",
+  "Modules": [
+    {
+      "Name": "MainMaze",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "AdditionalDependencies": [
+        "Engine"
+      ]
 		}
 	]
 }

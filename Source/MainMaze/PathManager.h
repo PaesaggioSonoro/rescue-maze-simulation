@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <string>
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PathManager.generated.h"
 

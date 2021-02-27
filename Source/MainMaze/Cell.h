@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include <vector>
 #include "GameFramework/Actor.h"
 #include "Cell.generated.h"
 

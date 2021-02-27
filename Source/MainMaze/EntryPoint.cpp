@@ -4,6 +4,7 @@
 #include "EntryPoint.h"
 
 #include <fstream>
+#include <vector>
 
 
 #include "Cell.h"
@@ -20,7 +21,7 @@ AEntryPoint::AEntryPoint()
     if (fast_start)
     {
 #if _DEBUG_MACHINE == 0
-        std::ifstream In(R"(C:\Users\Stark\Documents\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
+        std::ifstream In(R"(C:\Users\sonoa\Documents\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
 #else
 		std::ifstream In(R"(F:\Unreal Projects\MainMaze\Source\MainMaze\default.json)");
 #endif
