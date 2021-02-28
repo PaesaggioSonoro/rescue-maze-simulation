@@ -3,14 +3,12 @@
 #pragma once
 
 #include "Kismet/GameplayStatics.h"
-#include "rapidjson/document.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
-
+#include "Json.h"
 #include "EntryPoint.generated.h"
 
-using namespace rapidjson;
 using namespace std;
 
 UCLASS()
@@ -62,7 +60,7 @@ public:
     void Tick(float DeltaTime) override;
 
 private:
-    Document Data;
+    TSharedPtr<FJsonObject> JsonData;
     const int DISTANCE = 30;
     const int HEIGHT = 0;
 };
