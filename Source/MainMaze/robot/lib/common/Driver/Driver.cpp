@@ -70,22 +70,16 @@ void Driver::rotate(bool right)
 void Driver::go()
 {
 	Lasers* Lasers = Lasers::instance();
-	Gyro* Gyro = Gyro::instance();
 	float Start = Lasers->readF();
 
 
-	float Angle = Gyro->yaw();
 	if (Start < 30.0) return;
 	getBus()->SetSpeed(100, 100);
 	while (Lasers->readF() > Start - 30)
 	{
-		float CurrentYaw = Gyro->yaw();
-		float DeltaYaw = FMath::FindDeltaAngleRadians(CurrentYaw, Angle);
-		if (Angle > CurrentYaw) DeltaYaw *= -1;
-		// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Red,
-		// FString::Printf(TEXT("FrontAngle: %f"), Lasers->computeFrontAngle()));
-		// GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Blue,
-		// FString::Printf(TEXT("DeltaYaw: %f"), DeltaYaw));
+		float DeltaYaw = Lasers->computeFrontDifference() * 10;
+		GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Red,
+		                                 FString::Printf(TEXT("FrontAngle: %f"), DeltaYaw));
 		getBus()->SetSpeed(80 - DeltaYaw, 80 + DeltaYaw);
 		FPlatformProcess::Sleep(0.2);
 	}

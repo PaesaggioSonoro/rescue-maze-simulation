@@ -1,8 +1,6 @@
 ﻿#include "Lasers.hpp"
 
 
-
-
 #if _EXECUTION_ENVIRONMENT == 0
 
 float Lasers::readF()
@@ -12,7 +10,12 @@ float Lasers::readF()
 
 float Lasers::computeFrontAngle()
 {
-	return sqrt(pow(readFL() - readFR(), 2) + pow(Dimensions::FRONT_LASERS_DISTANCE, 2));
+	return -atan((readFL() - readFR()) / Dimensions::FRONT_LASERS_DISTANCE);
+}
+
+float Lasers::computeFrontDifference()
+{
+	return readFR() - readFL();
 }
 
 float Lasers::readFL()

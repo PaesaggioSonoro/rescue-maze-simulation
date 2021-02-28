@@ -13,6 +13,7 @@ class Lasers : public Singleton<Lasers>, BusConnection
 public:
 	float readF();
 	float computeFrontAngle();
+	float computeFrontDifference();
 	float readFL();
 	float readFR();
 	float readL();
