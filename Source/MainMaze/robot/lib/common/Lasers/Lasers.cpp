@@ -27,13 +27,13 @@ float Lasers::computeLateralDifference()
 
 float Lasers::readFL()
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector(), -Dimensions::FRONT_LASERS_DISTANCE / 2, true)
+	return Read(getBus()->GetActor()->GetActorForwardVector(), -Dimensions::FRONT_LASERS_DISTANCE / 2)
 		- Dimensions::DEPTH / 2;
 }
 
 float Lasers::readFR()
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector(), Dimensions::FRONT_LASERS_DISTANCE / 2, true)
+	return Read(getBus()->GetActor()->GetActorForwardVector(), Dimensions::FRONT_LASERS_DISTANCE / 2)
 		- Dimensions::DEPTH / 2;
 }
 
@@ -55,6 +55,17 @@ float Lasers::readB()
 		- Dimensions::DEPTH / 2;
 }
 
+bool Lasers::isValidWall(float l, float c, float r)
+{
+	float mean = std::min(r, l) + abs(r - l) / 2;
+	return (mean - 0.5 <= c && c <= mean + 0.5);
+}
+
+float Lasers::frontDifference(float l, float r)
+{
+	return r - l;
+}
+
 float Lasers::Read(FVector Direction, float DeltaY, bool Draw)
 {
 	FHitResult OutHit;
@@ -69,7 +80,9 @@ float Lasers::Read(FVector Direction, float DeltaY, bool Draw)
 	bool isHit = getBus()->GetActor()->GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility,
 	                                                                        CollisionParams);
 
-	if (Draw) DrawDebugLine(getBus()->GetActor()->GetWorld(), Start, FVector(OutHit.Location), FColor::Blue, false, 0.5, 0, 0.5);
+	if (Draw)
+		DrawDebugLine(getBus()->GetActor()->GetWorld(), Start, FVector(OutHit.Location), FColor::Blue, false, 0.5,
+		              0, 0.5);
 	float result = 8192;
 	if (isHit)
 	{

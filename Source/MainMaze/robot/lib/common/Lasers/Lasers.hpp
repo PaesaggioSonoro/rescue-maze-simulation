@@ -21,6 +21,9 @@ public:
 	float readR();
 	float readB();
 
+	static bool isValidWall(float l, float c, float r);
+	static float frontDifference(float l, float r);
+
 #if _EXECUTION_ENVIRONMENT == 0
 private:
 	// float Read(FVector Vector, FVector Direction);

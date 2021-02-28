@@ -13,23 +13,45 @@ void Robot::setup()
 	Driver* driver = Driver::instance();
 	Serial* serial = Serial::instance();
 
+	// for (int i = 0; i < 10000; ++i)
+	// {
+	// 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Emerald,FString::Printf(TEXT("Angle: %f"), FMath::RadiansToDegrees(lasers->computeFrontAngle())));
+	// 	FPlatformProcess::Sleep(0.2);
+	// }
+
 	// Walls walls = std::make_tuple(0x00, 0x01, 0x00, 0x01);
 	// Walls walls{0x00, 0x01, 0x01, 0x01};
 	// OutputMessage message(walls, true, false, true, false);
 	//
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,FString::Printf(TEXT("NEW")));
 	// FPlatformProcess::Sleep(0.1);
 	//
 	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
 	//                                  FString::Printf(
 	//                                      TEXT("Serial: %d"),
 	//                                      serial->write(message.toBinary(), Communication::MESSAGE_LENGTH)));
-	serial->close();
+	// serial->close();
 	driver->rotate(true);
 	driver->go();
 	driver->go();
 	driver->go();
 	driver->rotate(false);
+	driver->go();
+	driver->rotate(true);
+	driver->go();
+	driver->rotate(true);
+	driver->go();
+	driver->go();
+	driver->rotate(false);
+	driver->go();
+	driver->go();
+	driver->rotate(true);
+	driver->go();
+	driver->go();
+	driver->rotate(true);
+	driver->go();
+	driver->go();
+	driver->go();
+	// driver->rotate(false);
 	// driver->go();
 	// driver->rotate(true);
 	// driver->go();
