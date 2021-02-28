@@ -7,11 +7,16 @@ void Driver::rotate(bool right)
 {
 	bool bDebug = false;
 	Gyro* Gyro = Gyro::instance();
-	float Start = Gyro->yaw();
+	Lasers* Lasers = Lasers::instance();
 	if (right)
 	{
-		float Goal = FRotator::ClampAxis(Start + 80);
+		getBus()->SetSpeed(-20, 20);
+		while (Lasers->computeFrontDifference() > 0) FPlatformProcess::Sleep(0.01); // Align with the front wall
 		getBus()->SetSpeed(50, -50);
+		while (Lasers->computeFrontDifference() < 0) FPlatformProcess::Sleep(0.01); // Align with the front wall
+
+		float Start = Gyro->yaw();
+		float Goal = FRotator::ClampAxis(Start + 80);
 		if (bDebug)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Red,
@@ -38,8 +43,13 @@ void Driver::rotate(bool right)
 	}
 	else
 	{
-		float Goal = FRotator::ClampAxis(Start - 80);
+		getBus()->SetSpeed(20, -20);
+		while (Lasers->computeFrontDifference() < 0) FPlatformProcess::Sleep(0.01); // Align with the front wall
 		getBus()->SetSpeed(-50, 50);
+		while (Lasers->computeFrontDifference() > 0) FPlatformProcess::Sleep(0.01); // Align with the front wall
+
+		float Start = Gyro->yaw();
+		float Goal = FRotator::ClampAxis(Start - 80);
 		if (bDebug)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Red,
@@ -73,16 +83,42 @@ void Driver::go()
 	float Start = Lasers->readF();
 
 
-	if (Start < 30.0) return;
+	if (Start < CellDimensions::DEPTH - 5) return;
+	const float Objective = Start - CellDimensions::DEPTH;
 	getBus()->SetSpeed(100, 100);
-	while (Lasers->readF() > Start - 30)
+	while (Lasers->readF() > Objective + 5)
 	{
-		float DeltaYaw = Lasers->computeFrontDifference() * 10;
-		GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Red,
-		                                 FString::Printf(TEXT("FrontAngle: %f"), DeltaYaw));
-		getBus()->SetSpeed(80 - DeltaYaw, 80 + DeltaYaw);
-		FPlatformProcess::Sleep(0.2);
+		const float Lateral = Lasers->computeLateralDifference();
+		float DeltaYaw = Lasers->computeFrontDifference() * FRONTAL_COMPENSATION_MULTIPLIER;
+
+		if (Lateral < LATERAL_COMPENSATION_THRESHOLD && Lateral > -LATERAL_COMPENSATION_THRESHOLD)
+		{
+			DeltaYaw += FMath::Clamp(Lateral * LATERAL_COMPENSATION_MULTIPLIER, -MAX_LATERAL_COMPENSATION_SPEED,
+			                         MAX_LATERAL_COMPENSATION_SPEED);
+		}
+		UE_LOG(LogTemp, Warning, TEXT("DeltaYaw: %f"), DeltaYaw);
+		DeltaYaw = FMath::Clamp(DeltaYaw, static_cast<float>(-15), static_cast<float>(15));
+		getBus()->SetSpeed(100 - DeltaYaw, 100 + DeltaYaw);
+		FPlatformProcess::Sleep(0.3);
 	}
+	while (Lasers->readF() > Objective)
+	{
+		const float Lateral = Lasers->computeLateralDifference();
+		float DeltaYaw = Lasers->computeFrontDifference() * FRONTAL_COMPENSATION_MULTIPLIER / 2;
+
+		if (Lateral < LATERAL_COMPENSATION_THRESHOLD / 2 && Lateral > -LATERAL_COMPENSATION_THRESHOLD / 2)
+		{
+			DeltaYaw += FMath::Clamp(Lateral * LATERAL_COMPENSATION_MULTIPLIER / 2, -MAX_LATERAL_COMPENSATION_SPEED / 2,
+			                         MAX_LATERAL_COMPENSATION_SPEED / 2);
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("DeltaYaw: %f"), DeltaYaw);
+		DeltaYaw = FMath::Clamp(DeltaYaw, static_cast<float>(-8), static_cast<float>(8));
+		getBus()->SetSpeed(50 - DeltaYaw, 50 + DeltaYaw);
+		FPlatformProcess::Sleep(0.1);
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Blue,
+	                                 FString::Printf(TEXT("FrontDiff: %f"), Lasers->computeFrontDifference()));
 	getBus()->SetSpeed(0, 0);
 }
 

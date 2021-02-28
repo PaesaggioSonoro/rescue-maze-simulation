@@ -59,16 +59,11 @@ private:
     const float D = Dimensions::WIDTH; // distanza tra ruote
     const float R = Dimensions::WIDTH / 2; // D/2
     const float TO_DEGREES = 180 / M_PI;
-    const float WHEEL_ERROR = 0.06;
+    const float WHEEL_ERROR = 0.15;  
 
     float GetDistance(int Speed, float Time);
     float GetRadius(float L1, float L2);
     float GetAngle(float L1, float L2, float Radius);
-
-    float CalculateError() // TODO: implement
-    {
-        return 0.0;
-    }
 
     void Move(float Time);
 };

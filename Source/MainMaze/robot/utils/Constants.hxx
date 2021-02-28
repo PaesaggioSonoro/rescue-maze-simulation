@@ -9,6 +9,11 @@ namespace Dimensions
     const float FRONT_LASERS_DISTANCE = 10;
 }
 
+namespace CellDimensions
+{
+    const int DEPTH = 30;
+}
+
 namespace Communication
 {
     const int MESSAGE_LENGTH = 16;

@@ -14,6 +14,7 @@ public:
 	float readF();
 	float computeFrontAngle();
 	float computeFrontDifference();
+	float computeLateralDifference();
 	float readFL();
 	float readFR();
 	float readL();
@@ -23,6 +24,6 @@ public:
 #if _EXECUTION_ENVIRONMENT == 0
 private:
 	// float Read(FVector Vector, FVector Direction);
-	float Read(FVector Direction, float DeltaY = 0);
+	float Read(FVector Direction, float DeltaY = 0, bool Draw=false);
 #endif
 };

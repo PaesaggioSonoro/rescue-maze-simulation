@@ -39,12 +39,12 @@ AActor* AMainVehicle::GetActor()
 
 void AMainVehicle::SetSpeedR(int Speed)
 {
-	this->Speed_R = Speed + CalculateError();
+	this->Speed_R = Speed;
 }
 
 void AMainVehicle::SetSpeedL(int Speed)
 {
-	this->Speed_L = Speed + CalculateError();
+	this->Speed_L = Speed;
 }
 
 void AMainVehicle::SetSpeed(int SpeedL, int SpeedR)
@@ -75,10 +75,13 @@ float AMainVehicle::GetAngle(float L1, float L2, float Radius)
 
 void AMainVehicle::Move(float Time)
 {
-	const int L1_Error = FMath::RandRange(-WHEEL_ERROR, WHEEL_ERROR);
-	const int L2_Error = FMath::RandRange(-WHEEL_ERROR, WHEEL_ERROR);
+	const float L1_Error = FMath::RandRange(-WHEEL_ERROR, WHEEL_ERROR);
+	const float L2_Error = FMath::RandRange(-WHEEL_ERROR, WHEEL_ERROR);
 	const float L1 = GetDistance(Speed_R, Time) + L1_Error; // First Arch (rightmost)
 	const float L2 = GetDistance(Speed_L, Time) + L2_Error; // Second Arch (leftmost)
+	// UE_LOG(LogTemp, Warning, TEXT("l1 error: %f, l2 error: %f"), L1_Error, L2_Error);
+	// UE_LOG(LogTemp, Warning, TEXT("sr: %d, sl: %d"), Speed_R, Speed_L);
+
 	float Radius = GetRadius(L1, L2); // Radius (referring to right)
 	const float Angle = GetAngle(L1, L2, Radius); // Absolute Angle
 	Radius += R; // Make Radius referring to Center

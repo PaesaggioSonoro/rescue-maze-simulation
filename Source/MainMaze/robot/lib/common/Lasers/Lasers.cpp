@@ -1,5 +1,7 @@
 ﻿#include "Lasers.hpp"
 
+#include <utility>
+
 
 #if _EXECUTION_ENVIRONMENT == 0
 
@@ -18,15 +20,20 @@ float Lasers::computeFrontDifference()
 	return readFR() - readFL();
 }
 
+float Lasers::computeLateralDifference()
+{
+	return fmod(readL(), CellDimensions::DEPTH) - fmod(readR(), CellDimensions::DEPTH);
+}
+
 float Lasers::readFL()
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector(), -Dimensions::FRONT_LASERS_DISTANCE / 2)
+	return Read(getBus()->GetActor()->GetActorForwardVector(), -Dimensions::FRONT_LASERS_DISTANCE / 2, true)
 		- Dimensions::DEPTH / 2;
 }
 
 float Lasers::readFR()
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector(), Dimensions::FRONT_LASERS_DISTANCE / 2)
+	return Read(getBus()->GetActor()->GetActorForwardVector(), Dimensions::FRONT_LASERS_DISTANCE / 2, true)
 		- Dimensions::DEPTH / 2;
 }
 
@@ -48,7 +55,7 @@ float Lasers::readB()
 		- Dimensions::DEPTH / 2;
 }
 
-float Lasers::Read(FVector Direction, float DeltaY)
+float Lasers::Read(FVector Direction, float DeltaY, bool Draw)
 {
 	FHitResult OutHit;
 
@@ -62,8 +69,8 @@ float Lasers::Read(FVector Direction, float DeltaY)
 	bool isHit = getBus()->GetActor()->GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility,
 	                                                                        CollisionParams);
 
-	DrawDebugLine(getBus()->GetActor()->GetWorld(), Start, FVector(OutHit.Location), FColor::Blue, false, 0.5, 0, 0.5);
-	float result = pow(2, 13);
+	if (Draw) DrawDebugLine(getBus()->GetActor()->GetWorld(), Start, FVector(OutHit.Location), FColor::Blue, false, 0.5, 0, 0.5);
+	float result = 8192;
 	if (isHit)
 	{
 		result = OutHit.Distance;
