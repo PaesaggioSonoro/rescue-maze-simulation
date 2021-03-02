@@ -5,10 +5,9 @@
 
 void Driver::rotate(bool right)
 {
-	bool bDebug = false;
 	Gyro* Gyro = Gyro::instance();
 	Lasers* Lasers = Lasers::instance();
-	const int DirectionMultiplier = right ? 1 : -1;
+	int DirectionMultiplier = right ? 1 : -1;
 
 	if (right)
 	{
@@ -33,12 +32,20 @@ void Driver::rotate(bool right)
 		FPlatformProcess::Sleep(0.1);
 		Current = Gyro->yaw();
 	}
-	Goal = FRotator::ClampAxis(Start + 88 * DirectionMultiplier);
+	Goal = FRotator::ClampAxis(Start + 90 * DirectionMultiplier);
 	getBus()->SetSpeed(10 * DirectionMultiplier, -10 * DirectionMultiplier);
 	while (right ? RightTurnCondition(Start, Current, Goal) : LeftTurnCondition(Start, Current, Goal))
 	{
 		FPlatformProcess::Sleep(0.001);
 		Current = Gyro->yaw();
+	}
+
+	const float FrontC = Lasers->readF(), FrontR = Lasers->readFR(), FrontL = Lasers->readFL();
+	if (!Lasers::isValidWall(FrontL, FrontC, FrontR))
+	{
+		DirectionMultiplier = abs(FrontR - FrontC) < abs(FrontL - FrontC) ? -1 : 1;
+		getBus()->SetSpeed(-10 * DirectionMultiplier, 10 * DirectionMultiplier);
+		while (!Lasers->isValidWall(Lasers->readFL(), Lasers->readF(), Lasers->readFR())) FPlatformProcess::Sleep(0.01);
 	}
 	getBus()->SetSpeed(0, 0);
 }
@@ -46,39 +53,51 @@ void Driver::rotate(bool right)
 void Driver::go()
 {
 	Lasers* Lasers = Lasers::instance();
-	float CurrentDistance = Lasers->readF();
-	const int MissingCells = static_cast<int>(CurrentDistance) / static_cast<int>(CellDimensions::DEPTH);
-	const float Objective = (MissingCells - 1) * CellDimensions::DEPTH + (CellDimensions::DEPTH - Dimensions::DEPTH) /
-		2;
+	Gyro* Gyro = Gyro::instance();
+
+	float StartAngle = Gyro->yaw();
+	float CurrentDistance = Lasers->readF(), StartDistance = CurrentDistance;
+	const int Cells = static_cast<int>(CurrentDistance) / static_cast<int>(CellDimensions::DEPTH);
+	const float Objective = (Cells - 1) * CellDimensions::DEPTH + (CellDimensions::DEPTH - Dimensions::DEPTH) / 2;
+
 	int Speed;
 	while (CurrentDistance > Objective)
 	{
 		float DeltaYaw = 0;
+		const float CurrentAngle = Gyro->yaw() - StartAngle;
+		const float CurrentAngleDiff = atan2(sin(CurrentAngle - StartAngle), cos(CurrentAngle - StartAngle));
+		const float c = Lasers->readF(), r = Lasers->readFR(), l = Lasers->readFL();
 		const float Lateral = Lasers->computeLateralDifference();
-		const float FrontC = Lasers->readF(), FrontR = Lasers->readFR(), FrontL = Lasers->readFL();
-		const bool bNear = FrontC < Objective + 5, bValid = Lasers::isValidWall(FrontL, FrontC, FrontR);
+		const bool bNear = c < Objective + 5;
+		float DistanceComponent = std::max(1.f, CurrentDistance / CellDimensions::DEPTH);
 
-		if (bValid)
+		int direction = Lasers::wallDirection(l, c, r, StartDistance);
+
+		if (direction == 0)
 		{
-			DeltaYaw += Lasers::frontDifference(FrontL, FrontR) * FRONTAL_COMPENSATION_MULTIPLIER;
-			Speed = bNear ? 50 : 100;
+			DeltaYaw += Lasers::frontDifference(l, r) * FRONTAL_COMPENSATION_MULTIPLIER;
+			Speed = bNear ? Medium : Fast;
+			DeltaYaw /= DistanceComponent;
 		}
 		else
 		{
-			DeltaYaw += abs(FrontR - FrontC) < abs(FrontL - FrontC) ? 12 : -12;
-			Speed = 5;
+			Speed = Slow;
+			DeltaYaw += STUCK_COMPENSATION_MULTIPLIER * (CurrentAngleDiff > 0 ? -1 : 1);
 		}
-
 		if (Lateral < LATERAL_COMPENSATION_THRESHOLD && Lateral > -LATERAL_COMPENSATION_THRESHOLD)
 		{
 			DeltaYaw += FMath::Clamp(Lateral * LATERAL_COMPENSATION_MULTIPLIER, -MAX_LATERAL_COMPENSATION_SPEED,
 			                         MAX_LATERAL_COMPENSATION_SPEED);
 		}
-		UE_LOG(LogTemp, Warning, TEXT("objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f"),
-		       Objective, MissingCells, CurrentDistance, Speed, DeltaYaw);
+
+		UE_LOG(LogTemp, Warning,
+		       TEXT(
+			       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, direction: %d, angle: %f"
+		       ),
+		       Objective, Cells, CurrentDistance, Speed, DeltaYaw, DistanceComponent, direction, CurrentAngleDiff);
 		getBus()->SetSpeed(Speed - DeltaYaw, Speed + DeltaYaw);
 		FPlatformProcess::Sleep(bNear ? 0.01 : 0.2);
-		if (bValid) CurrentDistance = Lasers->readF();
+		if (direction == 0) CurrentDistance = Lasers->readF();
 	}
 	getBus()->SetSpeed(0, 0);
 }

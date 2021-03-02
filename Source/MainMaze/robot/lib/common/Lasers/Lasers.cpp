@@ -1,4 +1,5 @@
-﻿#include "Lasers.hpp"
+﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
+#include "Lasers.hpp"
 
 #include <utility>
 
@@ -55,10 +56,42 @@ float Lasers::readB()
 		- Dimensions::DEPTH / 2;
 }
 
-bool Lasers::isValidWall(float l, float c, float r)
+bool Lasers::isValidWall(float l, float c, float r, int tolerance)
 {
 	float mean = std::min(r, l) + abs(r - l) / 2;
-	return (mean - 0.5 <= c && c <= mean + 0.5);
+	return abs(l - r) < Dimensions::FRONT_LASERS_DISTANCE && mean - tolerance <= c && c <= mean + tolerance;
+}
+
+int Lasers::wallDirection(float l, float c, float r, float d, int tolerance) // 1 right, -1 left
+{
+	const float shortest = std::min(l, r);
+	const float longest = std::max(l, r);
+	const float difference = r - l;
+	const float absDifference = abs(difference);
+	const float diffRC = abs(r - c), diffLC = abs(l - c);
+
+	const float mean = shortest + absDifference / 2;
+	const bool isContinuous = mean - tolerance <= c && mean + tolerance >= c;
+	if (isContinuous)
+	{
+		const bool isFrontWall = absDifference < Dimensions::FRONT_LASERS_DISTANCE;
+		if (isFrontWall) return 0;
+		return difference > 0 ? 1 : -1;
+	}
+
+	if (l == longest)
+	{
+		if (diffRC > diffLC)
+			return r + tolerance >= d ? 1 : -1;
+		return diffRC > Dimensions::FRONT_LASERS_DISTANCE / 2 ? -1 : 1;
+	}
+		// ReSharper disable once CppRedundantElseKeywordInsideCompoundStatement
+	else
+	{
+		if (diffRC > diffLC)
+			return diffLC > Dimensions::FRONT_LASERS_DISTANCE / 2 ? 1 : -1;
+		return l + tolerance >= d ? -1 : 1;
+	}
 }
 
 float Lasers::frontDifference(float l, float r)
@@ -88,6 +121,11 @@ float Lasers::Read(FVector Direction, float DeltaY, bool Draw)
 	{
 		result = OutHit.Distance;
 	}
-	return result;
+	return MakeError(result);
+}
+
+float Lasers::MakeError(float value)
+{
+	return value * FMath::RandRange(0.97f, 1.03f);
 }
 #endif

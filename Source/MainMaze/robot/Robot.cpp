@@ -56,6 +56,14 @@ void Robot::setup()
 	driver->rotate(false);
 	driver->go();
 	driver->go();
+	// driver->rotate(false);
+	// driver->rotate(false);
+	// driver->go();
+	// driver->rotate(true);
+	// driver->go();
+	// driver->go();
+	// driver->go();
+	
 	
 	// driver->rotate(false);
 	// driver->go();
