@@ -53,51 +53,57 @@ void Driver::rotate(bool right)
 void Driver::go()
 {
 	Lasers* Lasers = Lasers::instance();
-	Gyro* Gyro = Gyro::instance();
-
-	float StartAngle = Gyro->yaw();
-	float CurrentDistance = Lasers->readF(), StartDistance = CurrentDistance;
+	const float FrontDistance = Lasers->readF(), BackDistance = Lasers->readB();
+	const bool UseFront = FrontDistance < BackDistance;
+	float CurrentDistance = UseFront ? FrontDistance : BackDistance;
+	const float StartDistance = CurrentDistance;
 	const int Cells = static_cast<int>(CurrentDistance) / static_cast<int>(CellDimensions::DEPTH);
-	const float Objective = (Cells - 1) * CellDimensions::DEPTH + (CellDimensions::DEPTH - Dimensions::DEPTH) / 2;
-
+	const float Objective = (Cells + (UseFront ? -1 : 1)) * CellDimensions::DEPTH + (CellDimensions::DEPTH -
+		Dimensions::DEPTH) / 2;
 	int Speed;
-	while (CurrentDistance > Objective)
+	float DeltaYaw = 0;
+	bool compensating = false;
+	while (UseFront ? CurrentDistance > Objective : CurrentDistance < Objective)
 	{
-		float DeltaYaw = 0;
-		const float CurrentAngle = Gyro->yaw() - StartAngle;
-		const float CurrentAngleDiff = atan2(sin(CurrentAngle - StartAngle), cos(CurrentAngle - StartAngle));
 		const float c = Lasers->readF(), r = Lasers->readFR(), l = Lasers->readFL();
 		const float Lateral = Lasers->computeLateralDifference();
 		const bool bNear = c < Objective + 5;
 		float DistanceComponent = std::max(1.f, CurrentDistance / CellDimensions::DEPTH);
 
-		int direction = Lasers::wallDirection(l, c, r, StartDistance);
+		bool isValidWall = Lasers::isValidWall(l, c, r);
 
-		if (direction == 0)
+		if (isValidWall)
 		{
-			DeltaYaw += Lasers::frontDifference(l, r) * FRONTAL_COMPENSATION_MULTIPLIER;
+			compensating = false;
+			DeltaYaw = Lasers::frontDifference(l, r) * FRONTAL_COMPENSATION_MULTIPLIER;
 			Speed = bNear ? Medium : Fast;
 			DeltaYaw /= DistanceComponent;
+			if (Lateral < LATERAL_COMPENSATION_THRESHOLD && Lateral > -LATERAL_COMPENSATION_THRESHOLD)
+			{
+				DeltaYaw += FMath::Clamp(Lateral * LATERAL_COMPENSATION_MULTIPLIER, -MAX_LATERAL_COMPENSATION_SPEED,
+				                         MAX_LATERAL_COMPENSATION_SPEED);
+			}
 		}
 		else
 		{
-			Speed = Slow;
-			DeltaYaw += STUCK_COMPENSATION_MULTIPLIER * (CurrentAngleDiff > 0 ? -1 : 1);
+			Speed = Medium;
+			if (!compensating)
+			{
+				compensating = true;
+				DeltaYaw = STUCK_COMPENSATION_MULTIPLIER * (DeltaYaw > 0 ? -1 : 1);
+			}
 		}
-		if (Lateral < LATERAL_COMPENSATION_THRESHOLD && Lateral > -LATERAL_COMPENSATION_THRESHOLD)
-		{
-			DeltaYaw += FMath::Clamp(Lateral * LATERAL_COMPENSATION_MULTIPLIER, -MAX_LATERAL_COMPENSATION_SPEED,
-			                         MAX_LATERAL_COMPENSATION_SPEED);
-		}
+
 
 		UE_LOG(LogTemp, Warning,
 		       TEXT(
-			       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, direction: %d, angle: %f"
+			       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, direction: %d, laser: %hs"
 		       ),
-		       Objective, Cells, CurrentDistance, Speed, DeltaYaw, DistanceComponent, direction, CurrentAngleDiff);
+		       Objective, Cells, CurrentDistance, Speed, DeltaYaw, DistanceComponent, isValidWall,
+		       UseFront?"front":"back");
 		getBus()->SetSpeed(Speed - DeltaYaw, Speed + DeltaYaw);
 		FPlatformProcess::Sleep(bNear ? 0.01 : 0.2);
-		if (direction == 0) CurrentDistance = Lasers->readF();
+		if (isValidWall) CurrentDistance = UseFront ? Lasers->readF() : Lasers->readB();
 	}
 	getBus()->SetSpeed(0, 0);
 }

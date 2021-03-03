@@ -11,8 +11,10 @@ class Driver : public Singleton<Driver>, BusConnection
 	const float LATERAL_COMPENSATION_THRESHOLD = 10;
 	const float LATERAL_COMPENSATION_MULTIPLIER = 10;
 	const float FRONTAL_COMPENSATION_MULTIPLIER = 5;
-	const int STUCK_COMPENSATION_MULTIPLIER=10;
-	enum Speeds {Slow=30, Medium=50, Fast=100};
+	const int STUCK_COMPENSATION_MULTIPLIER = 30;
+
+	enum Speeds { Slow=30, Medium=50, Fast=100 };
+
 public:
 	void rotate(bool right);
 	void go();
