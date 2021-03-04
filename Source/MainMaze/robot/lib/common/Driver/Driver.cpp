@@ -1,11 +1,13 @@
 ﻿#include "Driver.hpp"
 
+#include "MainMaze/robot/data/Directions.hxx"
+
 
 #if _EXECUTION_ENVIRONMENT == 0
 
-void Driver::rotate(bool right)
+void Driver::rotate(const bool right)
 {
-	Gyro* Gyro = Gyro::instance();
+	Gyro* gyro = Gyro::instance();
 	Lasers* Lasers = Lasers::instance();
 	int DirectionMultiplier = right ? 1 : -1;
 	float c = Lasers->readF(), r = Lasers->readFR(), l = Lasers->readFL();
@@ -30,7 +32,7 @@ void Driver::rotate(bool right)
 	}
 
 
-	const float Start = Gyro->yaw();
+	const float Start = gyro->yaw();
 	float Goal = FRotator::ClampAxis(Start + 85 * DirectionMultiplier);
 	float Current = Start;
 
@@ -38,7 +40,7 @@ void Driver::rotate(bool right)
 	while (right ? RightTurnCondition(Start, Current, Goal) : LeftTurnCondition(Start, Current, Goal))
 	{
 		FPlatformProcess::Sleep(0.1);
-		Current = Gyro->yaw();
+		Current = gyro->yaw();
 		UE_LOG(LogTemp, Warning, TEXT("MAIN -> starting: %f, objective: %f, current: %f"), Start, Goal, Current);
 	}
 	c = Lasers->readF(), r = Lasers->readFR(), l = Lasers->readFL();
@@ -59,7 +61,7 @@ void Driver::rotate(bool right)
 		while (right ? RightTurnCondition(Start, Current, Goal) : LeftTurnCondition(Start, Current, Goal))
 		{
 			FPlatformProcess::Sleep(0.001);
-			Current = Gyro->yaw();
+			Current = gyro->yaw();
 			UE_LOG(LogTemp, Warning, TEXT("FINAL -> starting: %f, objective: %f, current: %f"), Start, Goal, Current);
 		}
 	}
@@ -69,12 +71,16 @@ void Driver::rotate(bool right)
 void Driver::go()
 {
 	Lasers* Lasers = Lasers::instance();
+	Gyro* Gyro = Gyro::instance();
+
 	const float FrontDistance = Lasers->readF(), BackDistance = Lasers->readB();
+	const float StartRotation = Gyro->yaw();
 	const bool UseFront = FrontDistance < BackDistance;
 	float CurrentDistance = UseFront ? FrontDistance : BackDistance;
 	const int Cells = static_cast<int>(CurrentDistance) / static_cast<int>(CellDimensions::DEPTH);
-	const float Objective = (Cells + (UseFront ? -1 : 1)) * CellDimensions::DEPTH + (CellDimensions::DEPTH -
-		Dimensions::DEPTH) / 2;
+	const float Objective = std::max(
+		5.f, (Cells + (UseFront ? -1 : 1)) * CellDimensions::DEPTH + (CellDimensions::DEPTH -
+			Dimensions::DEPTH) / 2);
 	int Speed;
 	float DeltaYaw = 0;
 	bool compensating = false;
@@ -87,7 +93,18 @@ void Driver::go()
 
 		bool isValidWall = Lasers::isValidWall(l, c, r);
 
-		if (isValidWall)
+		float CurrentAngle = Gyro->yaw();
+		float DeltaAngle = CurrentAngle - StartRotation;
+		if (DeltaAngle > 180) DeltaAngle -= 360;
+		else if (DeltaAngle < -180) DeltaAngle += 360;
+
+		if (abs(DeltaAngle) > DEGREE_OVERRIDE_THRESHOLD)
+		{
+			Speed = Slow;
+			compensating = true;
+			DeltaYaw = STUCK_COMPENSATION_MULTIPLIER * (DeltaAngle > 0 ? 1 : -1);
+		}
+		else if (isValidWall)
 		{
 			compensating = false;
 			DeltaYaw = Lasers::frontDifference(l, r) * FRONTAL_COMPENSATION_MULTIPLIER;
@@ -112,10 +129,12 @@ void Driver::go()
 
 		UE_LOG(LogTemp, Warning,
 		       TEXT(
-			       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, direction: %d, laser: %hs"
+			       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, laser: %hs, compensating: %d"
 		       ),
-		       Objective, Cells, CurrentDistance, Speed, DeltaYaw, DistanceComponent, isValidWall,
-		       UseFront?"front":"back");
+		       Objective, Cells, CurrentDistance, Speed, DeltaYaw, DistanceComponent, UseFront?"front":"back",
+		       compensating);
+		UE_LOG(LogTemp, Warning, TEXT("direction: %d, startangle: %f, currentangle: %f, anglediff: %f"), isValidWall,
+		       StartRotation, CurrentAngle, DeltaAngle);
 		getBus()->SetSpeed(Speed - DeltaYaw, Speed + DeltaYaw);
 		FPlatformProcess::Sleep(bNear ? 0.01 : 0.2);
 		if (isValidWall) CurrentDistance = UseFront ? Lasers->readF() : Lasers->readB();
@@ -123,21 +142,21 @@ void Driver::go()
 	getBus()->SetSpeed(0, 0);
 }
 
-bool Driver::RightTurnCondition(const float Start, const float Current, const float Goal)
+bool Driver::RightTurnCondition(const float start, const float current, const float goal)
 {
-	if (Goal >= Start)
+	if (goal >= start)
 	{
-		return Start <= Current && Current <= Goal;
+		return start <= current && current <= goal;
 	}
-	return Start <= Current && Current <= 360 || 0 <= Current && Current <= Goal;
+	return start <= current && current <= 360 || 0 <= current && current <= goal;
 }
 
-bool Driver::LeftTurnCondition(const float Start, const float Current, const float Goal)
+bool Driver::LeftTurnCondition(const float start, const float current, const float goal)
 {
-	if (Goal < Start)
+	if (goal < start)
 	{
-		return Goal <= Current && Current <= Start;
+		return goal <= current && current <= start;
 	}
-	return 0 <= Current && Current <= Start || Goal <= Current && Current <= 360;
+	return 0 <= current && current <= start || goal <= current && current <= 360;
 }
 #endif
