@@ -22,7 +22,7 @@ public:
 	float readB();
 
 	static bool isValidWall(float l, float c, float r, int tolerance=5);
-	static int wallDirection(float l, float c, float r, float d, int tolerance=5);
+	static int wallDirection(float l, float c, float r, float d, int tolerance=1);
 	static float frontDifference(float l, float r);
 
 #if _EXECUTION_ENVIRONMENT == 0
