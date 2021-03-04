@@ -6,12 +6,12 @@
 #include "lib/common/Serial/Serial.hpp"
 #include "lib/common/Temp/Temp.hpp"
 
-void Robot::setup()
+void Robot::Setup()
 {
-	Lasers* lasers = Lasers::instance();
-	Temp* temps = Temp::instance();
-	Driver* driver = Driver::instance();
-	Serial* serial = Serial::instance();
+	Lasers* lasers = Lasers::Instance();
+	Temp* temps = Temp::Instance();
+	Driver* driver = Driver::Instance();
+	Serial* serial = Serial::Instance();
 
 	// for (int i = 0; i < 10000; ++i)
 	// {
@@ -30,32 +30,32 @@ void Robot::setup()
 	//                                      TEXT("Serial: %d"),
 	//                                      serial->write(message.toBinary(), Communication::MESSAGE_LENGTH)));
 	// serial->close();
-	driver->rotate(true);
-	driver->go();
-	driver->go();
-	driver->go();
-	driver->rotate(false);
-	driver->go();
-	driver->rotate(true);
-	driver->go();
-	driver->rotate(true);
-	driver->go();
-	driver->go();
-	driver->rotate(false);
-	driver->go();
-	driver->go();
-	driver->rotate(true);
-	driver->go();
-	driver->go();
-	driver->rotate(true);
-	driver->go();
-	driver->go();
-	driver->go();
-	driver->rotate(true);
-	driver->go();
-	driver->rotate(false);
-	driver->go();
-	driver->go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Go();
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Go();
+	driver->Go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Go();
 	// driver->rotate(false);
 	// driver->rotate(false);
 	// driver->go();
@@ -119,6 +119,6 @@ void Robot::setup()
 	// driver->go();
 }
 
-void Robot::main()
+void Robot::Main()
 {
 }

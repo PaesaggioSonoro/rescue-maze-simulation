@@ -17,7 +17,7 @@ ThreadClass::ThreadClass(DrivableActor* Actor)
 
 void ThreadClass::DoWork()
 {
-	BusConnection::setBus(Actor);
+	BusConnection::SetBus(Actor);
 	RunRobot();
 }
 
@@ -25,7 +25,7 @@ void ThreadClass::RunRobot() const
 {
 	__try
 	{
-		Robot().setup();
+		Robot().Setup();
 	}
 	__except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION)
 	{

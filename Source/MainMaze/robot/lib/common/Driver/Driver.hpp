@@ -7,22 +7,22 @@
 
 class Driver : public Singleton<Driver>, BusConnection
 {
-	const float MAX_LATERAL_COMPENSATION_SPEED = 5;
-	const float LATERAL_COMPENSATION_THRESHOLD = 10;
-	const float LATERAL_COMPENSATION_MULTIPLIER = 10;
-	const float FRONTAL_COMPENSATION_MULTIPLIER = 5;
-	const int STUCK_COMPENSATION_MULTIPLIER = 30;
-	const int DEGREE_OVERRIDE_THRESHOLD = 5;
+	const float max_lateral_compensation_speed_ = 5;
+	const float lateral_compensation_threshold_ = 10;
+	const float lateral_compensation_multiplier_ = 10;
+	const float frontal_compensation_multiplier_ = 5;
+	const int stuck_compensation_multiplier_ = 35;
+	const int degree_override_threshold_ = 5;
 
-	enum Speeds { Slow=30, Medium=50, Fast=100 };
+	enum Speeds { kSlow=30, kMedium=50, kFast=100 };
 
 public:
-	void rotate(bool right);
-	void go();
+	void Rotate(bool right);
+	void Go();
 
 #if _EXECUTION_ENVIRONMENT == 0
 private:
-	static bool RightTurnCondition(float Start, float Current, float Goal);
-	static bool LeftTurnCondition(float Start, float Current, float Goal);
+	static bool RightTurnCondition(float start, float current, float goal);
+	static bool LeftTurnCondition(float start, float current, float goal);
 #endif
 };

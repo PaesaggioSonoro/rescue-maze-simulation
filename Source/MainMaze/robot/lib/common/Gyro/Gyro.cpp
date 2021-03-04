@@ -1,42 +1,41 @@
-﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
-#include "Gyro.hpp"
+﻿#include "Gyro.hpp"
 
 #if _EXECUTION_ENVIRONMENT == 0
-void Gyro::start(unsigned long refresh)
+void Gyro::Start(unsigned long refresh)
 {
 }
 
-float Gyro::yaw()
+float Gyro::Yaw()
 {
-	return FRotator::ClampAxis(getBus()->GetActor()->GetActorRotation().Yaw + CalculateError());
+	return FRotator::ClampAxis(GetBus()->GetActor()->GetActorRotation().Yaw + CalculateError());
 }
 
-float Gyro::roll()
+float Gyro::Roll()
 {
-	return FRotator::ClampAxis(getBus()->GetActor()->GetActorRotation().Roll + CalculateError());
+	return FRotator::ClampAxis(GetBus()->GetActor()->GetActorRotation().Roll + CalculateError());
 }
 
-float Gyro::pitch()
+float Gyro::Pitch()
 {
-	return FRotator::ClampAxis(getBus()->GetActor()->GetActorRotation().Pitch + CalculateError());
+	return FRotator::ClampAxis(GetBus()->GetActor()->GetActorRotation().Pitch + CalculateError());
 }
 
-void Gyro::calibrate()
+void Gyro::Calibrate()
 {
-	Max_Error = 0.0;
+	max_error_ = 0.0;
 }
 
 float Gyro::CalculateError()
 {
-	if (bError)
+	if (error_)
 	{
 		srand(static_cast<int>(time(nullptr)));
 		const auto now = high_resolution_clock::now();
 		const auto nanos = duration_cast<nanoseconds>(now.time_since_epoch()).count();
 		srand(nanos);
-		Max_Error += ((rand() % 100) - 50) / (500.0 * (1 / Drift));
+		max_error_ += ((rand() % 100) - 50) / (500.0 * (1 / drift_));
 
-		return Max_Error;
+		return max_error_;
 	}
 	return 0.0;
 }

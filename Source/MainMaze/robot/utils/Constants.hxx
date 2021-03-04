@@ -1,21 +1,20 @@
-﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
-#pragma once
+﻿#pragma once
 
-namespace Dimensions
+namespace dimensions
 {
-    const float WIDTH = 15;
-    const float HEIGHT = 12;
-    const float DEPTH = 20;
-    const float FRONT_LASERS_DISTANCE = 10;
+    const float width = 15;
+    const float height = 12;
+    const float depth = 20;
+    const float front_lasers_distance = 10;
 }
 
-namespace CellDimensions
+namespace cell_dimensions
 {
-    const int DEPTH = 30;
+    const int depth = 30;
 }
 
-namespace Communication
+namespace communication
 {
-    const int MESSAGE_LENGTH = 16;
-    const int FLAGS_OFFSET = 4;
+    const int message_length = 16;
+    const int flags_offset = 4;
 }

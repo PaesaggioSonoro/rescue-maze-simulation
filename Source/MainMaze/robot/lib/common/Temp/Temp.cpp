@@ -3,47 +3,47 @@
 
 #if _EXECUTION_ENVIRONMENT == 0
 
-void Temp::calibrate()
+void Temp::Calibrate()
 {
-	GeometricPair<float> values = read();
+	const GeometricPair<float> values = Read();
 	threshold = (values.left + values.right) / 2;
 }
 
-GeometricPair<float> Temp::read()
+GeometricPair<float> Temp::Read() const
 {
-	auto out = GeometricPair<float>(
-		ReadSide(getBus()->GetActor()->GetActorRightVector() * -1),
-		ReadSide(getBus()->GetActor()->GetActorRightVector())
+	const auto out = GeometricPair<float>(
+		ReadSide(GetBus()->GetActor()->GetActorRightVector() * -1),
+		ReadSide(GetBus()->GetActor()->GetActorRightVector())
 	);
 	return out;
 }
 
-GeometricPair<bool> Temp::isHot()
+GeometricPair<bool> Temp::IsHot() const
 {
-	auto measures = read();
+	const auto measures = Read();
 	return GeometricPair<bool>(
 		measures.left > threshold,
 		measures.right > threshold
 	);
 }
 
-float Temp::ReadSide(FVector Direction)
+float Temp::ReadSide(FVector direction) const
 {
-	FHitResult OutHit;
+	FHitResult out_hit;
 
-	FVector Start = getBus()->GetActor()->GetActorLocation();
+	FVector start = GetBus()->GetActor()->GetActorLocation();
 
-	FVector End = (Start + (Direction * 1000.0f));
+	FVector end = start + direction * 1000.0f;
 
-	FCollisionQueryParams CollisionParams;
+	FCollisionQueryParams collision_params;
 
-	bool isHit = getBus()->GetActor()->GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility,
-	                                                                        CollisionParams);
+	bool is_hit = GetBus()->GetActor()->GetWorld()->LineTraceSingleByChannel(out_hit, start, end, ECC_Visibility,
+	                                                                         collision_params);
 	float result = 0;
-	if (isHit)
+	if (is_hit)
 	{
-		AWall* Wall = Cast<AWall>(OutHit.GetActor());
-		if (Wall) result = Wall->temp;
+		AWall* wall = Cast<AWall>(out_hit.GetActor());
+		if (wall) result = wall->temp;
 		// if (wall) result = (OutHit.Distance < 30) ? wall->temp : 25;
 	}
 	return result;

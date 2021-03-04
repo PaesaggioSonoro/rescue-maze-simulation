@@ -4,6 +4,6 @@
 class Robot
 {
 public:
-    static void setup();
-    static void main();
+    static void Setup();
+    static void Main();
 };

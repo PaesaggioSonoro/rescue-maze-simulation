@@ -1,5 +1,4 @@
-﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
-#pragma once
+﻿#pragma once
 
 #if _EXECUTION_ENVIRONMENT == 0
 #include "DrawDebugHelpers.h"
@@ -14,12 +13,12 @@ class Temp : public Singleton<Temp>, BusConnection
 {
 public:
 	float threshold = 0;
-	void calibrate();
-	GeometricPair<float> read();
-	GeometricPair<bool> isHot();
+	void Calibrate();
+	GeometricPair<float> Read() const;
+	GeometricPair<bool> IsHot() const;
 
 #if _EXECUTION_ENVIRONMENT == 0
 private:
-	float ReadSide(FVector Direction);
+	float ReadSide(FVector direction) const;
 #endif
 };

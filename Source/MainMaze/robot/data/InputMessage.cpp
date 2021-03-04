@@ -14,9 +14,9 @@ InputMessage::InputMessage(char* data)
 {
     Direction in_direction = std::make_tuple(data[0], data[1], data[2], data[3]);
     this->direction = &in_direction;
-    const int o = Communication::FLAGS_OFFSET;
+    const int o = communication::flags_offset;
     drop = climb = old = false;
-    for (int i = o; i < Communication::MESSAGE_LENGTH; ++i)
+    for (int i = o; i < communication::message_length; ++i)
     {
         if (data[i] == 'D') drop = true;
         if (data[i] == 'C') climb = true;
@@ -26,8 +26,8 @@ InputMessage::InputMessage(char* data)
 
 char* InputMessage::toBinary() const
 {
-    static char out[Communication::MESSAGE_LENGTH] = {};
-    const int o = Communication::FLAGS_OFFSET;
+    static char out[communication::message_length] = {};
+    const int o = communication::flags_offset;
     copyTuple4(out, *direction);
     if (drop) out[o + 0] = 'D';
     if (climb) out[o + 1] = 'C';

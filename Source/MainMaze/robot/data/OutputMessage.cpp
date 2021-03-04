@@ -15,9 +15,9 @@ OutputMessage::OutputMessage(char* data)
 {
     Walls in_walls = std::make_tuple(data[0], data[1], data[2], data[3]);
     this->walls = &in_walls;
-    const int o = Communication::FLAGS_OFFSET;
+    const int o = communication::flags_offset;
     black = checkpoint = ramp = obstacle = false;
-    for (int i = o; i < Communication::MESSAGE_LENGTH; ++i)
+    for (int i = o; i < communication::message_length; ++i)
     {
         if (data[i] == 'B') black = true;
         if (data[i] == 'C') checkpoint = true;
@@ -28,8 +28,8 @@ OutputMessage::OutputMessage(char* data)
 
 char* OutputMessage::toBinary() const
 {
-    static char out[Communication::MESSAGE_LENGTH] = {};
-    const int o = Communication::FLAGS_OFFSET;
+    static char out[communication::message_length] = {};
+    const int o = communication::flags_offset;
     copyTuple4(out, *walls);
     if (black) out[o + 0] = 'B';
     if (checkpoint) out[o + 1] = 'C';

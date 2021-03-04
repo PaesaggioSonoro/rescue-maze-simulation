@@ -11,17 +11,17 @@ using namespace std::chrono;
 class Gyro : public Singleton<Gyro>, BusConnection
 {
 public:
-	void start(unsigned long refresh);
-	float yaw();
-	float roll();
-	float pitch();
-	void calibrate();
+	void Start(unsigned long refresh);
+	float Yaw();
+	float Roll();
+	float Pitch();
+	void Calibrate();
 
 #if _EXECUTION_ENVIRONMENT == 0
 private:
-	float Drift = 1;
-	bool bError = true;
+	float drift_ = 1;
+	bool error_ = true;
 	float CalculateError();
-	float Max_Error = 0.0;
+	float max_error_ = 0.0;
 #endif
 };

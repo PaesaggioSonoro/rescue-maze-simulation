@@ -2,15 +2,15 @@
 
 #if _EXECUTION_ENVIRONMENT == 0
 
-DrivableActor* BusConnection::_Bus = nullptr;
+DrivableActor* BusConnection::bus_ = nullptr;
 
-void BusConnection::setBus(DrivableActor* Actor)
+void BusConnection::SetBus(DrivableActor* actor)
 {
-    _Bus = Actor;
+    bus_ = actor;
 }
 
-DrivableActor* BusConnection::getBus()
+DrivableActor* BusConnection::GetBus()
 {
-    return _Bus;
+    return bus_;
 }
 #endif

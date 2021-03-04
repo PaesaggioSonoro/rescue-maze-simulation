@@ -5,124 +5,124 @@
 
 #if _EXECUTION_ENVIRONMENT == 0
 
-void Driver::rotate(const bool right)
+void Driver::Rotate(const bool right)
 {
-	Gyro* gyro = Gyro::instance();
-	Lasers* Lasers = Lasers::instance();
-	int DirectionMultiplier = right ? 1 : -1;
-	float c = Lasers->readF(), r = Lasers->readFR(), l = Lasers->readFL();
+	Gyro* gyro = Gyro::Instance();
+	Lasers* lasers = Lasers::Instance();
+	const int direction_multiplier = right ? 1 : -1;
+	float c = lasers->ReadF(), r = lasers->ReadFr(), l = lasers->ReadFl();
 
-	if (Lasers::isValidWall(l, c, r))
+	if (Lasers::IsValidWall(l, c, r))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Valid wall, centralizing"));
 		if (right)
 		{
-			getBus()->SetSpeed(-20, 20);
-			while (Lasers->computeFrontDifference() > 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
-			getBus()->SetSpeed(50, -50);
-			while (Lasers->computeFrontDifference() < 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
+			GetBus()->SetSpeed(-20, 20);
+			while (lasers->ComputeFrontDifference() > 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
+			GetBus()->SetSpeed(50, -50);
+			while (lasers->ComputeFrontDifference() < 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
 		}
 		else
 		{
-			getBus()->SetSpeed(20, -20);
-			while (Lasers->computeFrontDifference() < 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
-			getBus()->SetSpeed(-50, 50);
-			while (Lasers->computeFrontDifference() > 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
+			GetBus()->SetSpeed(20, -20);
+			while (lasers->ComputeFrontDifference() < 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
+			GetBus()->SetSpeed(-50, 50);
+			while (lasers->ComputeFrontDifference() > 1) FPlatformProcess::Sleep(0.01); // Align with the front wall
 		}
 	}
 
 
-	const float Start = gyro->yaw();
-	float Goal = FRotator::ClampAxis(Start + 85 * DirectionMultiplier);
-	float Current = Start;
+	const float start = gyro->Yaw();
+	float goal = FRotator::ClampAxis(start + 85 * direction_multiplier);
+	float current = start;
 
 
-	while (right ? RightTurnCondition(Start, Current, Goal) : LeftTurnCondition(Start, Current, Goal))
+	while (right ? RightTurnCondition(start, current, goal) : LeftTurnCondition(start, current, goal))
 	{
 		FPlatformProcess::Sleep(0.1);
-		Current = gyro->yaw();
-		UE_LOG(LogTemp, Warning, TEXT("MAIN -> starting: %f, objective: %f, current: %f"), Start, Goal, Current);
+		current = gyro->Yaw();
+		UE_LOG(LogTemp, Warning, TEXT("MAIN -> starting: %f, objective: %f, current: %f"), start, goal, current);
 	}
-	c = Lasers->readF(), r = Lasers->readFR(), l = Lasers->readFL();
-	getBus()->SetSpeed(10 * DirectionMultiplier, -10 * DirectionMultiplier);
-	float diff = Lasers->computeFrontDifference();
-	if (Lasers::isValidWall(l, c, r))
+	c = lasers->ReadF(), r = lasers->ReadFr(), l = lasers->ReadFl();
+	GetBus()->SetSpeed(10 * direction_multiplier, -10 * direction_multiplier);
+	float diff = lasers->ComputeFrontDifference();
+	if (Lasers::IsValidWall(l, c, r))
 	{
 		while (right ? diff < 0 : diff > 0)
 		{
 			FPlatformProcess::Sleep(0.001);
-			diff = Lasers->computeFrontDifference();
+			diff = lasers->ComputeFrontDifference();
 			UE_LOG(LogTemp, Warning, TEXT("FINAL -> difference: %f"), diff);
 		}
 	}
 	else
 	{
-		Goal = FRotator::ClampAxis(Start + 90 * DirectionMultiplier);
-		while (right ? RightTurnCondition(Start, Current, Goal) : LeftTurnCondition(Start, Current, Goal))
+		goal = FRotator::ClampAxis(start + 90 * direction_multiplier);
+		while (right ? RightTurnCondition(start, current, goal) : LeftTurnCondition(start, current, goal))
 		{
 			FPlatformProcess::Sleep(0.001);
-			Current = gyro->yaw();
-			UE_LOG(LogTemp, Warning, TEXT("FINAL -> starting: %f, objective: %f, current: %f"), Start, Goal, Current);
+			current = gyro->Yaw();
+			UE_LOG(LogTemp, Warning, TEXT("FINAL -> starting: %f, objective: %f, current: %f"), start, goal, current);
 		}
 	}
-	getBus()->SetSpeed(0, 0);
+	GetBus()->SetSpeed(0, 0);
 }
 
-void Driver::go()
+void Driver::Go()
 {
-	Lasers* Lasers = Lasers::instance();
-	Gyro* Gyro = Gyro::instance();
+	Lasers* lasers = Lasers::Instance();
+	Gyro* gyro = Gyro::Instance();
 
-	const float FrontDistance = Lasers->readF(), BackDistance = Lasers->readB();
-	const float StartRotation = Gyro->yaw();
-	const bool UseFront = FrontDistance < BackDistance;
-	float CurrentDistance = UseFront ? FrontDistance : BackDistance;
-	const int Cells = static_cast<int>(CurrentDistance) / static_cast<int>(CellDimensions::DEPTH);
-	const float Objective = std::max(
-		5.f, (Cells + (UseFront ? -1 : 1)) * CellDimensions::DEPTH + (CellDimensions::DEPTH -
-			Dimensions::DEPTH) / 2);
-	int Speed;
-	float DeltaYaw = 0;
+	const float front_distance = lasers->ReadF(), BackDistance = lasers->ReadB();
+	const float start_rotation = gyro->Yaw();
+	const bool use_front = front_distance < BackDistance;
+	float current_distance = use_front ? front_distance : BackDistance;
+	const int cells = static_cast<int>(current_distance) / static_cast<int>(cell_dimensions::depth);
+	const float objective = std::max(
+		5.f, (cells + (use_front ? -1 : 1)) * cell_dimensions::depth + (cell_dimensions::depth -
+			dimensions::depth) / 2);
+	int speed;
+	float delta_yaw = 0;
 	bool compensating = false;
-	while (UseFront ? CurrentDistance > Objective : CurrentDistance < Objective)
+	while (use_front ? current_distance > objective : current_distance < objective)
 	{
-		const float c = Lasers->readF(), r = Lasers->readFR(), l = Lasers->readFL();
-		const float Lateral = Lasers->computeLateralDifference();
-		const bool bNear = c < Objective + 5;
-		float DistanceComponent = std::max(1.f, CurrentDistance / CellDimensions::DEPTH);
+		const float c = lasers->ReadF(), r = lasers->ReadFr(), l = lasers->ReadFl();
+		const float lateral = lasers->ComputeLateralDifference();
+		const bool near = c < objective + 5;
+		float distance_component = std::max(1.f, current_distance / cell_dimensions::depth);
 
-		bool isValidWall = Lasers::isValidWall(l, c, r);
+		bool is_valid_wall = Lasers::IsValidWall(l, c, r);
 
-		float CurrentAngle = Gyro->yaw();
-		float DeltaAngle = CurrentAngle - StartRotation;
-		if (DeltaAngle > 180) DeltaAngle -= 360;
-		else if (DeltaAngle < -180) DeltaAngle += 360;
+		float current_angle = gyro->Yaw();
+		float delta_angle = current_angle - start_rotation;
+		if (delta_angle > 180) delta_angle -= 360;
+		else if (delta_angle < -180) delta_angle += 360;
 
-		if (abs(DeltaAngle) > DEGREE_OVERRIDE_THRESHOLD)
+		if (abs(delta_angle) > degree_override_threshold_)
 		{
-			Speed = Slow;
+			speed = kSlow;
 			compensating = true;
-			DeltaYaw = STUCK_COMPENSATION_MULTIPLIER * (DeltaAngle > 0 ? 1 : -1);
+			delta_yaw = stuck_compensation_multiplier_ * (delta_angle > 0 ? 1 : -1);
 		}
-		else if (isValidWall)
+		else if (is_valid_wall)
 		{
 			compensating = false;
-			DeltaYaw = Lasers::frontDifference(l, r) * FRONTAL_COMPENSATION_MULTIPLIER;
-			Speed = bNear ? Medium : Fast;
-			DeltaYaw /= DistanceComponent;
-			if (Lateral < LATERAL_COMPENSATION_THRESHOLD && Lateral > -LATERAL_COMPENSATION_THRESHOLD)
+			delta_yaw = Lasers::FrontDifference(l, r) * frontal_compensation_multiplier_;
+			speed = near ? kMedium : kFast;
+			delta_yaw /= distance_component;
+			if (lateral < lateral_compensation_threshold_ && lateral > -lateral_compensation_threshold_)
 			{
-				DeltaYaw += FMath::Clamp(Lateral * LATERAL_COMPENSATION_MULTIPLIER, -MAX_LATERAL_COMPENSATION_SPEED,
-				                         MAX_LATERAL_COMPENSATION_SPEED);
+				delta_yaw += FMath::Clamp(lateral * lateral_compensation_multiplier_, -max_lateral_compensation_speed_,
+				                         max_lateral_compensation_speed_);
 			}
 		}
 		else
 		{
-			Speed = Medium;
+			speed = kMedium;
 			if (!compensating)
 			{
 				compensating = true;
-				DeltaYaw = STUCK_COMPENSATION_MULTIPLIER * (DeltaYaw > 0 ? -1 : 1);
+				delta_yaw = stuck_compensation_multiplier_ * (delta_yaw > 0 ? -1 : 1);
 			}
 		}
 
@@ -131,15 +131,15 @@ void Driver::go()
 		       TEXT(
 			       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, laser: %hs, compensating: %d"
 		       ),
-		       Objective, Cells, CurrentDistance, Speed, DeltaYaw, DistanceComponent, UseFront?"front":"back",
+		       objective, cells, current_distance, speed, delta_yaw, distance_component, use_front?"front":"back",
 		       compensating);
-		UE_LOG(LogTemp, Warning, TEXT("direction: %d, startangle: %f, currentangle: %f, anglediff: %f"), isValidWall,
-		       StartRotation, CurrentAngle, DeltaAngle);
-		getBus()->SetSpeed(Speed - DeltaYaw, Speed + DeltaYaw);
-		FPlatformProcess::Sleep(bNear ? 0.01 : 0.2);
-		if (isValidWall) CurrentDistance = UseFront ? Lasers->readF() : Lasers->readB();
+		UE_LOG(LogTemp, Warning, TEXT("direction: %d, startangle: %f, currentangle: %f, anglediff: %f"), is_valid_wall,
+		       start_rotation, current_angle, delta_angle);
+		GetBus()->SetSpeed(speed - delta_yaw, speed + delta_yaw);
+		FPlatformProcess::Sleep(near ? 0.01 : 0.2);
+		if (is_valid_wall) current_distance = use_front ? lasers->ReadF() : lasers->ReadB();
 	}
-	getBus()->SetSpeed(0, 0);
+	GetBus()->SetSpeed(0, 0);
 }
 
 bool Driver::RightTurnCondition(const float start, const float current, const float goal)

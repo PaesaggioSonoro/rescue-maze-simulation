@@ -1,130 +1,97 @@
-﻿// ReSharper disable CppUE4CodingStandardNamingViolationWarning
-#include "Lasers.hpp"
+﻿#include "Lasers.hpp"
 
 #include <utility>
 
 
 #if _EXECUTION_ENVIRONMENT == 0
 
-float Lasers::readF()
+float Lasers::ReadF() const
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector()) - Dimensions::DEPTH / 2;
+	return Read(GetBus()->GetActor()->GetActorForwardVector()) - dimensions::depth / 2;
 }
 
-float Lasers::computeFrontAngle()
+float Lasers::ComputeFrontAngle() const
 {
-	return -atan((readFL() - readFR()) / Dimensions::FRONT_LASERS_DISTANCE);
+	return -atan((ReadFl() - ReadFr()) / dimensions::front_lasers_distance);
 }
 
-float Lasers::computeFrontDifference()
+float Lasers::ComputeFrontDifference() const
 {
-	return readFR() - readFL();
+	return ReadFr() - ReadFl();
 }
 
-float Lasers::computeLateralDifference()
+float Lasers::ComputeLateralDifference() const
 {
-	return fmod(readL(), CellDimensions::DEPTH) - fmod(readR(), CellDimensions::DEPTH);
+	return fmod(ReadL(), cell_dimensions::depth) - fmod(ReadR(), cell_dimensions::depth);
 }
 
-float Lasers::readFL()
+float Lasers::ReadFl() const
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector(), -Dimensions::FRONT_LASERS_DISTANCE / 2)
-		- Dimensions::DEPTH / 2;
+	return Read(GetBus()->GetActor()->GetActorForwardVector(), -dimensions::front_lasers_distance / 2)
+		- dimensions::depth / 2;
 }
 
-float Lasers::readFR()
+float Lasers::ReadFr() const
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector(), Dimensions::FRONT_LASERS_DISTANCE / 2)
-		- Dimensions::DEPTH / 2;
+	return Read(GetBus()->GetActor()->GetActorForwardVector(), dimensions::front_lasers_distance / 2)
+		- dimensions::depth / 2;
 }
 
-float Lasers::readL()
+float Lasers::ReadL() const
 {
-	return Read(getBus()->GetActor()->GetActorRightVector() * -1)
-		- Dimensions::WIDTH / 2;
+	return Read(GetBus()->GetActor()->GetActorRightVector() * -1)
+		- dimensions::width / 2;
 }
 
-float Lasers::readR()
+float Lasers::ReadR() const
 {
-	return Read(getBus()->GetActor()->GetActorRightVector())
-		- Dimensions::WIDTH / 2;
+	return Read(GetBus()->GetActor()->GetActorRightVector())
+		- dimensions::width / 2;
 }
 
-float Lasers::readB()
+float Lasers::ReadB() const
 {
-	return Read(getBus()->GetActor()->GetActorForwardVector() * -1)
-		- Dimensions::DEPTH / 2;
+	return Read(GetBus()->GetActor()->GetActorForwardVector() * -1)
+		- dimensions::depth / 2;
 }
 
-bool Lasers::isValidWall(float l, float c, float r, int tolerance)
+bool Lasers::IsValidWall(const float l, const float c, const float r, const int tolerance)
 {
-	float mean = std::min(r, l) + abs(r - l) / 2;
-	return abs(l - r) < Dimensions::FRONT_LASERS_DISTANCE && mean - tolerance <= c && c <= mean + tolerance;
+	const float mean = std::min(r, l) + abs(r - l) / 2;
+	return abs(l - r) < dimensions::front_lasers_distance && mean - tolerance <= c && c <= mean + tolerance;
 }
 
-int Lasers::wallDirection(float l, float c, float r, float d, int tolerance) // 1 right, -1 left
-{
-	const float shortest = std::min(l, r);
-	const float longest = std::max(l, r);
-	const float difference = r - l;
-	const float absDifference = abs(difference);
-	const float diffRC = abs(r - c), diffLC = abs(l - c);
-
-	const float mean = shortest + absDifference / 2;
-	const bool isContinuous = mean - tolerance <= c && mean + tolerance >= c;
-	if (isContinuous)
-	{
-		const bool isFrontWall = absDifference < Dimensions::FRONT_LASERS_DISTANCE;
-		if (isFrontWall) return 0;
-		return difference > 0 ? 1 : -1;
-	}
-
-	if (l == longest)
-	{
-		if (diffRC > diffLC)
-			return r + tolerance >= d ? 1 : -1;
-		return diffRC > Dimensions::FRONT_LASERS_DISTANCE / 2 ? -1 : 1;
-	}
-		// ReSharper disable once CppRedundantElseKeywordInsideCompoundStatement
-	else
-	{
-		if (diffRC > diffLC)
-			return diffLC > Dimensions::FRONT_LASERS_DISTANCE / 2 ? 1 : -1;
-		return l + tolerance >= d ? -1 : 1;
-	}
-}
-
-float Lasers::frontDifference(float l, float r)
+float Lasers::FrontDifference(const float l, const float r)
 {
 	return r - l;
 }
 
-float Lasers::Read(FVector Direction, float DeltaY, bool Draw)
+float Lasers::Read(FVector direction, float delta_y, bool draw) const
 {
-	FHitResult OutHit;
+	FHitResult out_hit;
 
-	FVector Start = getBus()->GetActor()->GetActorLocation();
-	if (DeltaY != 0) Start += getBus()->GetActor()->GetActorRotation().RotateVector(FVector(0, DeltaY, 0));
+	FVector start = GetBus()->GetActor()->GetActorLocation();
+	if (delta_y != 0) start += GetBus()->GetActor()->GetActorRotation().RotateVector(FVector(0, delta_y, 0));
 
-	FVector End = (Start + (Direction * 800.0f));
+	FVector end = (start + (direction * 800.0f));
 
-	FCollisionQueryParams CollisionParams;
+	FCollisionQueryParams collision_params;
 
-	bool isHit = getBus()->GetActor()->GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility,
-	                                                                        CollisionParams);
+	bool is_hit = GetBus()->GetActor()->GetWorld()->LineTraceSingleByChannel(out_hit, start, end, ECC_Visibility,
+	                                                                        collision_params);
 
-	if (Draw)
-		DrawDebugLine(getBus()->GetActor()->GetWorld(), Start, FVector(OutHit.Location), FColor::Blue, false, 0.5,
+	if (draw)
+		DrawDebugLine(GetBus()->GetActor()->GetWorld(), start, FVector(out_hit.Location), FColor::Blue, false, 0.5,
 		              0, 0.5);
 	float result = 8192;
-	if (isHit)
+	if (is_hit)
 	{
-		result = OutHit.Distance;
+		result = out_hit.Distance;
 	}
 	return MakeError(result);
 }
 
-float Lasers::MakeError(float value)
+float Lasers::MakeError(const float value) const
 {
 	return value * FMath::RandRange(0.97f, 1.03f);
 }

@@ -4,64 +4,64 @@
 #if _EXECUTION_ENVIRONMENT == 0
 
 
-void Serial::connect(const char* portName, int baud_rate)
+void Serial::Connect(const char* port_name, const int baud_rate)
 {
-	this->Handler = CreateFileA(static_cast<LPCSTR>(portName),
+	this->handler_ = CreateFileA(port_name,
 	                            GENERIC_READ | GENERIC_WRITE,
 	                            0,
 	                            nullptr,
 	                            OPEN_EXISTING,
 	                            FILE_ATTRIBUTE_NORMAL,
 	                            nullptr);
-	if (this->Handler == INVALID_HANDLE_VALUE)
+	if (this->handler_ == INVALID_HANDLE_VALUE)
 	{
-		std::cout << "Error opening serial port " << portName << "\n";
+		std::cout << "Error opening serial port " << port_name << "\n";
 		return;
 	}
 
-	DCB dcbSerialParams = {0};
-	dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+	DCB dcb_serial_params = {0};
+	dcb_serial_params.DCBlength = sizeof(dcb_serial_params);
 
-	GetCommState(this->Handler, &dcbSerialParams);
+	GetCommState(this->handler_, &dcb_serial_params);
 
-	dcbSerialParams.BaudRate = baud_rate; // Setting BaudRate = 9600
-	dcbSerialParams.ByteSize = 8; // Setting ByteSize = 8
-	dcbSerialParams.StopBits = ONESTOPBIT; // Setting StopBits = 1
-	dcbSerialParams.Parity = NOPARITY; // Setting Parity = None
-	dcbSerialParams.fDtrControl = DTR_CONTROL_ENABLE;
+	dcb_serial_params.BaudRate = baud_rate; // Setting BaudRate = 9600
+	dcb_serial_params.ByteSize = 8; // Setting ByteSize = 8
+	dcb_serial_params.StopBits = ONESTOPBIT; // Setting StopBits = 1
+	dcb_serial_params.Parity = NOPARITY; // Setting Parity = None
+	dcb_serial_params.fDtrControl = DTR_CONTROL_ENABLE;
 
-	PurgeComm(this->Handler, PURGE_RXCLEAR | PURGE_TXCLEAR);
+	PurgeComm(this->handler_, PURGE_RXCLEAR | PURGE_TXCLEAR);
 
-	SetCommState(this->Handler, &dcbSerialParams);
+	SetCommState(this->handler_, &dcb_serial_params);
 }
 
-int Serial::read(char* buffer, unsigned size)
+int Serial::Read(char* buffer, const unsigned size) const
 {
-	DWORD bytesRead{};
-	const unsigned int toRead = size;
-	memset(static_cast<void*>(buffer), 0, size);
-	ReadFile(this->Handler, static_cast<void*>(buffer), toRead, &bytesRead, nullptr);
-	return bytesRead;
+	DWORD bytes_read{};
+	const unsigned int bytes_to_read = size;
+	memset(buffer, 0, size);
+	ReadFile(this->handler_, buffer, bytes_to_read, &bytes_read, nullptr);
+	return bytes_read;
 }
 
-bool Serial::write(char buffer[], unsigned size)
+bool Serial::Write(char buffer[], const unsigned size) const
 {
-	DWORD BytesWritten; // No of bytes written to the port
+	DWORD bytes_written; // No of bytes written to the port
 
-	return WriteFile(this->Handler, // Handle to the Serial port
-	                 static_cast<void*>(buffer), // Data to be written to the port
+	return WriteFile(this->handler_, // Handle to the Serial port
+	                 buffer, // Data to be written to the port
 	                 size, //No of bytes to write
-	                 &BytesWritten, //Bytes written
+	                 &bytes_written, //Bytes written
 	                 nullptr);
 }
 
-void Serial::close()
+void Serial::Close() const
 {
-	CloseHandle(this->Handler); //Closing the Serial Port
+	CloseHandle(this->handler_); //Closing the Serial Port
 }
 
 Serial::~Serial()
 {
-	CloseHandle(this->Handler); //Closing the Serial Port
+	CloseHandle(this->handler_); //Closing the Serial Port
 }
 #endif
