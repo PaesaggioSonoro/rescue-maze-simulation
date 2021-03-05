@@ -3,6 +3,8 @@
 #if _EXECUTION_ENVIRONMENT == 0
 void Gyro::Start(unsigned long refresh)
 {
+	const auto now = high_resolution_clock::now();
+	last_reset_time_ = duration_cast<milliseconds>(now.time_since_epoch()).count();
 }
 
 float Gyro::Yaw()
@@ -22,20 +24,20 @@ float Gyro::Pitch()
 
 void Gyro::Calibrate()
 {
-	max_error_ = 0.0;
+	const auto now = high_resolution_clock::now();
+	last_reset_time_ = duration_cast<milliseconds>(now.time_since_epoch()).count();
 }
 
 float Gyro::CalculateError()
 {
 	if (error_)
 	{
-		srand(static_cast<int>(time(nullptr)));
 		const auto now = high_resolution_clock::now();
-		const auto nanos = duration_cast<nanoseconds>(now.time_since_epoch()).count();
-		srand(nanos);
-		max_error_ += ((rand() % 100) - 50) / (500.0 * (1 / drift_));
-
-		return max_error_;
+		const auto millis = duration_cast<milliseconds>(now.time_since_epoch()).count();
+		const auto current_error = drift_ * (millis - last_reset_time_) / 1000 - FMath::RandRange(0, 1);
+		UE_LOG(LogTemp, Warning, TEXT("CURRENTERROR: %f, lastTime: %lld, millis: %lld"), current_error,
+		       last_reset_time_, millis);
+		return current_error;
 	}
 	return 0.0;
 }

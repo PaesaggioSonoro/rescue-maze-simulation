@@ -19,9 +19,9 @@ public:
 
 #if _EXECUTION_ENVIRONMENT == 0
 private:
-	float drift_ = 1;
+	float drift_ = 0.2;
 	bool error_ = true;
 	float CalculateError();
-	float max_error_ = 0.0;
+	long long last_reset_time_ = 0;
 #endif
 };

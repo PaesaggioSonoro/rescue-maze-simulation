@@ -7,8 +7,8 @@
 
 void Driver::Rotate(const bool right)
 {
-	Gyro* gyro = Gyro::Instance();
 	Lasers* lasers = Lasers::Instance();
+	Gyro* gyro = Gyro::Instance();
 	const int direction_multiplier = right ? 1 : -1;
 	float c = lasers->ReadF(), r = lasers->ReadFr(), l = lasers->ReadFl();
 
@@ -32,6 +32,7 @@ void Driver::Rotate(const bool right)
 	}
 
 
+	gyro->Calibrate();
 	const float start = gyro->Yaw();
 	float goal = FRotator::ClampAxis(start + 85 * direction_multiplier);
 	float current = start;
@@ -72,6 +73,7 @@ void Driver::Go()
 {
 	Lasers* lasers = Lasers::Instance();
 	Gyro* gyro = Gyro::Instance();
+	gyro->Calibrate();
 
 	const float front_distance = lasers->ReadF(), BackDistance = lasers->ReadB();
 	const float start_rotation = gyro->Yaw();
@@ -113,7 +115,7 @@ void Driver::Go()
 			if (lateral < lateral_compensation_threshold_ && lateral > -lateral_compensation_threshold_)
 			{
 				delta_yaw += FMath::Clamp(lateral * lateral_compensation_multiplier_, -max_lateral_compensation_speed_,
-				                         max_lateral_compensation_speed_);
+				                          max_lateral_compensation_speed_);
 			}
 		}
 		else
