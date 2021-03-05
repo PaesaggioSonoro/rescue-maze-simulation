@@ -56,13 +56,29 @@ void Robot::Setup()
 	driver->Rotate(false);
 	driver->Go();
 	driver->Go();
-	// driver->rotate(false);
-	// driver->rotate(false);
-	// driver->go();
-	// driver->rotate(true);
-	// driver->go();
-	// driver->go();
-	// driver->go();
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Rotate(true);
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Go();
+	driver->Go();
+	driver->Go();
+	driver->Rotate(false);
+	driver->Go();
+	driver->Go();
+	
 	
 	
 	// driver->rotate(false);
