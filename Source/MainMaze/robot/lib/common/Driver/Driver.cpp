@@ -1,6 +1,7 @@
 ﻿#include "Driver.hpp"
 
 #include "MainMaze/robot/data/Directions.hxx"
+#include "MainMaze/robot/utils/Math.hxx"
 
 
 #if _EXECUTION_ENVIRONMENT == 0
@@ -34,7 +35,7 @@ void Driver::Rotate(const bool right)
 
 	gyro->Calibrate();
 	const float start = gyro->Yaw();
-	float goal = FRotator::ClampAxis(start + 85 * direction_multiplier);
+	float goal = math::ClampAngle(start + 85 * direction_multiplier);
 	float current = start;
 
 
@@ -58,7 +59,7 @@ void Driver::Rotate(const bool right)
 	}
 	else
 	{
-		goal = FRotator::ClampAxis(start + 90 * direction_multiplier);
+		goal = math::ClampAngle(start + 90 * direction_multiplier);
 		while (right ? RightTurnCondition(start, current, goal) : LeftTurnCondition(start, current, goal))
 		{
 			FPlatformProcess::Sleep(0.001);
@@ -75,10 +76,10 @@ void Driver::Go()
 	Gyro* gyro = Gyro::Instance();
 	gyro->Calibrate();
 
-	const float front_distance = lasers->ReadF(), BackDistance = lasers->ReadB();
+	const float front_distance = lasers->ReadF(), back_distance = lasers->ReadB();
 	const float start_rotation = gyro->Yaw();
-	const bool use_front = front_distance < BackDistance;
-	float current_distance = use_front ? front_distance : BackDistance;
+	const bool use_front = front_distance < back_distance;
+	float current_distance = use_front ? front_distance : back_distance;
 	const int cells = static_cast<int>(current_distance) / static_cast<int>(cell_dimensions::depth);
 	const float objective = std::max(
 		5.f, (cells + (use_front ? -1 : 1)) * cell_dimensions::depth + (cell_dimensions::depth -
@@ -96,9 +97,7 @@ void Driver::Go()
 		bool is_valid_wall = Lasers::IsValidWall(l, c, r);
 
 		float current_angle = gyro->Yaw();
-		float delta_angle = current_angle - start_rotation;
-		if (delta_angle > 180) delta_angle -= 360;
-		else if (delta_angle < -180) delta_angle += 360;
+		float delta_angle = math::AngleDifference(current_angle, start_rotation);
 
 		if (abs(delta_angle) > degree_override_threshold_)
 		{
@@ -114,8 +113,8 @@ void Driver::Go()
 			delta_yaw /= distance_component;
 			if (lateral < lateral_compensation_threshold_ && lateral > -lateral_compensation_threshold_)
 			{
-				delta_yaw += FMath::Clamp(lateral * lateral_compensation_multiplier_, -max_lateral_compensation_speed_,
-				                          max_lateral_compensation_speed_);
+				delta_yaw += math::Clamp(lateral * lateral_compensation_multiplier_, -max_lateral_compensation_speed_,
+				                         max_lateral_compensation_speed_);
 			}
 		}
 		else
