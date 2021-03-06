@@ -15,7 +15,7 @@ void Driver::Rotate(const bool right)
 
 	if (Lasers::IsValidWall(l, c, r))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Valid wall, centralizing"));
+		if (debug_) UE_LOG(LogTemp, Warning, TEXT("Valid wall, centralizing"));
 		if (right)
 		{
 			GetBus()->SetSpeed(-20, 20);
@@ -43,7 +43,8 @@ void Driver::Rotate(const bool right)
 	{
 		FPlatformProcess::Sleep(0.1);
 		current = gyro->Yaw();
-		UE_LOG(LogTemp, Warning, TEXT("MAIN -> starting: %f, objective: %f, current: %f"), start, goal, current);
+		if (debug_) UE_LOG(LogTemp, Warning, TEXT("MAIN -> starting: %f, objective: %f, current: %f"), start, goal,
+		                   current);
 	}
 	c = lasers->ReadF(), r = lasers->ReadFr(), l = lasers->ReadFl();
 	GetBus()->SetSpeed(10 * direction_multiplier, -10 * direction_multiplier);
@@ -54,7 +55,7 @@ void Driver::Rotate(const bool right)
 		{
 			FPlatformProcess::Sleep(0.001);
 			diff = lasers->ComputeFrontDifference();
-			UE_LOG(LogTemp, Warning, TEXT("FINAL -> difference: %f"), diff);
+			if (debug_) UE_LOG(LogTemp, Warning, TEXT("FINAL -> difference: %f"), diff);
 		}
 	}
 	else
@@ -64,7 +65,8 @@ void Driver::Rotate(const bool right)
 		{
 			FPlatformProcess::Sleep(0.001);
 			current = gyro->Yaw();
-			UE_LOG(LogTemp, Warning, TEXT("FINAL -> starting: %f, objective: %f, current: %f"), start, goal, current);
+			if (debug_) UE_LOG(LogTemp, Warning, TEXT("FINAL -> starting: %f, objective: %f, current: %f"), start, goal,
+			                   current);
 		}
 	}
 	GetBus()->SetSpeed(0, 0);
@@ -128,14 +130,19 @@ void Driver::Go()
 		}
 
 
-		UE_LOG(LogTemp, Warning,
-		       TEXT(
-			       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, laser: %hs, compensating: %d"
-		       ),
-		       objective, cells, current_distance, speed, delta_yaw, distance_component, use_front?"front":"back",
-		       compensating);
-		UE_LOG(LogTemp, Warning, TEXT("direction: %d, startangle: %f, currentangle: %f, anglediff: %f"), is_valid_wall,
-		       start_rotation, current_angle, delta_angle);
+		if (debug_)
+		{
+			UE_LOG(LogTemp, Warning,
+			       TEXT(
+				       "objective: %f, missingcells: %d, distance: %f, speed: %d, deltayaw: %f, dc: %f, laser: %hs, compensating: %d"
+			       ),
+			       objective, cells, current_distance, speed, delta_yaw, distance_component, use_front?"front":"back",
+			       compensating);
+			UE_LOG(LogTemp, Warning, TEXT("direction: %d, startangle: %f, currentangle: %f, anglediff: %f"),
+			       is_valid_wall,
+			       start_rotation, current_angle, delta_angle);
+		}
+
 		GetBus()->SetSpeed(speed - delta_yaw, speed + delta_yaw);
 		FPlatformProcess::Sleep(near ? 0.01 : 0.2);
 		if (is_valid_wall) current_distance = use_front ? lasers->ReadF() : lasers->ReadB();

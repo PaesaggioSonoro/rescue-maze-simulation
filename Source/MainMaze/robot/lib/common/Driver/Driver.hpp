@@ -16,6 +16,8 @@ class Driver : public Singleton<Driver>, BusConnection
 
 	enum Speeds { kSlow=30, kMedium=50, kFast=100 };
 
+	const bool debug_ = false;
+
 public:
 	void Rotate(bool right);
 	void Go();
