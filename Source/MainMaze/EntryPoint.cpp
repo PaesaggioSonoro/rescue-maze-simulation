@@ -92,10 +92,14 @@ void AEntryPoint::BeginPlay()
 		(Start[2]->AsNumber() * DISTANCE + Bias_Y) + DISTANCE / 2.0,
 		(HEIGHT + Bias_Z + 15));
 	const FRotator StartRotation = FRotator(0, 0, 0);
-	CameraActor->SetActorLocationAndRotation(StartLocation, StartRotation, false, nullptr, ETeleportType::None);
+	MainVehicle->SetActorLocationAndRotation(StartLocation, StartRotation, false, nullptr, ETeleportType::None);
 
 	APlayerController* MyController = UGameplayStatics::GetPlayerController(this, 0);
-	MyController->SetViewTargetWithBlend(CameraActor, 2.f);
+
+	
+	//MyController->SetViewTargetWithBlend(CameraActor, 2.f);
+	MyController->SetViewTarget(CameraActor);
+
 }
 
 // Called every frame
@@ -108,7 +112,7 @@ bool AEntryPoint::GetShowIntro() const { return ShowIntro; }
 
 void AEntryPoint::StartRobot() const
 {
-	DrivableActor* Actor = Cast<AMainVehicle>(CameraActor);
+	DrivableActor* Actor = Cast<AMainVehicle>(MainVehicle);
 	if (Actor != nullptr)
 	{
 		FAutoDeleteAsyncTask<ThreadClass>* task = new FAutoDeleteAsyncTask<ThreadClass>(Actor);
