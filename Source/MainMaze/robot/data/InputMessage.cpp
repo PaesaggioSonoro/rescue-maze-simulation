@@ -2,7 +2,7 @@
 #include "InputMessage.hpp"
 #include "MainMaze/robot/utils/Constants.hxx"
 
-InputMessage::InputMessage(Direction direction, bool drop, bool climb, bool old)
+InputMessage::InputMessage(Directions direction, bool drop, bool climb, bool old)
     : direction(&direction),
       drop(drop),
       climb(climb),
@@ -12,7 +12,7 @@ InputMessage::InputMessage(Direction direction, bool drop, bool climb, bool old)
 
 InputMessage::InputMessage(char* data)
 {
-    Direction in_direction = std::make_tuple(data[0], data[1], data[2], data[3]);
+    Directions in_direction = std::make_tuple(data[0], data[1], data[2], data[3]);
     this->direction = &in_direction;
     const int o = communication::flags_offset;
     drop = climb = old = false;

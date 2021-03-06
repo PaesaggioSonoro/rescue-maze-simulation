@@ -5,12 +5,12 @@
 
 class InputMessage final : public IMessage
 {
-    Direction* direction;
+    Directions* direction;
     bool drop;
     bool climb;
     bool old;
 public:
-    InputMessage(Direction direction, bool drop, bool climb, bool old);
+    InputMessage(Directions direction, bool drop, bool climb, bool old);
 
     explicit InputMessage(char* data);
 
