@@ -91,7 +91,7 @@ void AEntryPoint::BeginPlay()
 		(Start[1]->AsNumber() * DISTANCE + Bias_X) + DISTANCE / 2.0,
 		(Start[2]->AsNumber() * DISTANCE + Bias_Y) + DISTANCE / 2.0,
 		(HEIGHT + Bias_Z + 15));
-	const FRotator StartRotation = FRotator(0, 0, 0);
+	const FRotator StartRotation = FRotator(0, 90, 0);
 	MainVehicle->SetActorLocationAndRotation(StartLocation, StartRotation, false, nullptr, ETeleportType::None);
 
 	APlayerController* MyController = UGameplayStatics::GetPlayerController(this, 0);

@@ -65,5 +65,5 @@ public:
 private:
     TSharedPtr<FJsonObject> JsonData;
     const int DISTANCE = 30;
-    const int HEIGHT = 0;
+    const int HEIGHT = -12;
 };
