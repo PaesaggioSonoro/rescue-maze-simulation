@@ -22,7 +22,10 @@ class MAINMAZE_API AEntryPoint : public AActor
     UPROPERTY(EditAnywhere, Category = "Main|Class", meta = (DisplayName = "Wall to spawn"))
     TSubclassOf<AActor> WallToSpawn;
     UPROPERTY(EditAnywhere, Category = "Main|Class")
+    AActor* MainVehicle;
+    UPROPERTY(EditAnywhere, Category = "Main|Class")
     AActor* CameraActor;
+    
 
 
     UPROPERTY(EditAnywhere, Category = "Main|Materials")
