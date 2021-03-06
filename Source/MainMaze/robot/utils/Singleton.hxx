@@ -5,20 +5,20 @@ template <typename T>
 class Singleton
 {
 public:
-    static T* Instance()
-    {
-        static T instance{};
-        return &instance;
-    }
+	static T* Instance()
+	{
+		static T instance{};
+		return &instance;
+	}
 
-    // Singleton(const Singleton&) = delete;
+	Singleton(const Singleton&) = delete;
 
-    Singleton& operator=(Singleton) = delete;
+	Singleton& operator=(Singleton) = delete;
 
 protected:
-    Singleton()
-    {
-    }
+	Singleton()
+	{
+	}
 };
 
 #endif //MAZE_SINGLETON_H
