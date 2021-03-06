@@ -35,8 +35,6 @@ float Gyro::CalculateError()
 		const auto now = high_resolution_clock::now();
 		const auto millis = duration_cast<milliseconds>(now.time_since_epoch()).count();
 		const auto current_error = drift_ * (millis - last_reset_time_) / 1000 - FMath::RandRange(0, 1);
-		UE_LOG(LogTemp, Warning, TEXT("CURRENTERROR: %f, lastTime: %lld, millis: %lld"), current_error,
-		       last_reset_time_, millis);
 		return current_error;
 	}
 	return 0.0;
