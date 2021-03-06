@@ -1,6 +1,8 @@
 ﻿#include "Robot.hpp"
 
 
+
+#include "lib/common/Compass/Compass.hpp"
 #include "lib/common/Driver/Driver.hpp"
 #include "lib/common/Lasers/Lasers.hpp"
 #include "lib/common/Serial/Serial.hpp"
@@ -12,6 +14,7 @@ void Robot::Setup()
 	Temp* temps = Temp::Instance();
 	Driver* driver = Driver::Instance();
 	Serial* serial = Serial::Instance();
+	Compass* compass = Compass::Instance();
 
 	// for (int i = 0; i < 10000; ++i)
 	// {
@@ -30,66 +33,38 @@ void Robot::Setup()
 	//                                      TEXT("Serial: %d"),
 	//                                      serial->write(message.toBinary(), Communication::MESSAGE_LENGTH)));
 	// serial->close();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Go();
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Go();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Go();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Go();
-	driver->Go();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Go();
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Go();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Rotate(true);
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Go();
-	driver->Go();
-	driver->Go();
-	driver->Rotate(false);
-	driver->Go();
-	driver->Go();
+	compass->GoTo(kTop);
+	compass->GoTo(kTop);
+	compass->GoTo(kTop);
+	compass->GoTo(kLeft);
+	compass->GoTo(kTop);
+	compass->GoTo(kRight);
+	compass->GoTo(kRight);
+	compass->GoTo(kTop);
+	compass->GoTo(kTop);
+	compass->GoTo(kRight);
+	compass->GoTo(kRight);
+	compass->GoTo(kBottom);
+	compass->GoTo(kBottom);
+	compass->GoTo(kBottom);
+	compass->GoTo(kLeft);
+	compass->GoTo(kBottom);
+	compass->GoTo(kBottom);
+	compass->GoTo(kBottom);
+	compass->GoTo(kRight);
+	compass->GoTo(kTop);
+	compass->GoTo(kTop);
+	compass->GoTo(kRight);
+	compass->GoTo(kTop);
+	compass->GoTo(kLeft);
+	compass->GoTo(kTop);
+	compass->GoTo(kLeft);
+	compass->GoTo(kLeft);
+	compass->GoTo(kLeft);
+	compass->GoTo(kLeft);
+	compass->GoTo(kBottom);
+	compass->GoTo(kBottom);
 	
-	
-	
-	// driver->rotate(false);
-	// driver->go();
-	// driver->rotate(true);
-	// driver->go();
-	// driver->rotate(true);
-	// driver->go();
-	// driver->go();
-	// driver->rotate(false);
-	// driver->go();
 	// if (GEngine)
 	// {
 	//     GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow,
