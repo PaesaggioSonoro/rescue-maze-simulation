@@ -3,8 +3,8 @@
 #include "ThreadClass.h"
 
 
-#include "MainMaze/robot/Robot.hpp"
-#include "MainMaze/robot/lib/common/Bus/BusConnection.hpp"
+#include "MainMaze/robot/src/Robot.hpp"
+#include "MainMaze/robot/lib/Bus/BusConnection.hpp"
 #include "Core/Public/Windows/AllowWindowsPlatformTypes.h"
 #include "Windows.h"
 #include "Core/Public/Windows/HideWindowsPlatformTypes.h"
