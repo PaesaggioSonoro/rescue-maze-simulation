@@ -1,0 +1,3 @@
+[submodule "Source/MainMaze/robot"]
+	path = Source/MainMaze/robot
+	url = https://github.com/LeoneBacciu/rescue-maze-core.git
