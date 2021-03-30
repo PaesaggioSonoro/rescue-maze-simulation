@@ -68,12 +68,13 @@ void AEntryPoint::BeginPlay()
 		ACell* a = GetWorld()->SpawnActorDeferred<ACell>(CellToSpawn, NewTr);
 
 		UMaterialInterface* Material;
+		const bool black = JsonCell->GetBoolField("black"), checkpoint = JsonCell->GetBoolField("checkpoint");
 
-		if (JsonCell->GetBoolField("black"))
+		if (black)
 		{
 			Material = BlackMaterial;
 		}
-		else if (JsonCell->GetBoolField("checkpoint"))
+		else if (checkpoint)
 		{
 			Material = CheckpointMaterial;
 		}
@@ -82,7 +83,7 @@ void AEntryPoint::BeginPlay()
 			Material = BaseMaterial;
 		}
 
-		a->Build(Walls, Material, Temps);
+		a->Build(Walls, Material, Temps, black, checkpoint);
 		UGameplayStatics::FinishSpawningActor(a, a->GetTransform());
 	}
 

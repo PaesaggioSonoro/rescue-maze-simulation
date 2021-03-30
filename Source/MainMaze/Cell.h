@@ -26,8 +26,12 @@ protected:
 public:
     // Called every frame
     void Tick(float DeltaTime) override;
-    void Build(std::vector<int> Walls, UMaterialInterface* Material, std::vector<int> Temps);
+    void Build(std::vector<int> walls, UMaterialInterface* material, std::vector<int> temps, bool black, bool checkpoint);
+    bool IsBlack() const;
+    bool IsCheckpoint() const;
 
 private:
-    int Points[4][2] = {{30, 30}, {30, 0}, {0, 0}, {0, 30}};
+    int points_[4][2] = {{30, 30}, {30, 0}, {0, 0}, {0, 30}};
+    bool black_ = false;
+    bool checkpoint_ = false;
 };
