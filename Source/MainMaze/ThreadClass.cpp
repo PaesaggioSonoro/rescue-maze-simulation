@@ -25,7 +25,8 @@ void ThreadClass::RunRobot() const
 {
 	__try
 	{
-		Robot().Setup();
+		Robot::Setup();
+		while(Robot::Main());
 	}
 	__except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION)
 	{
