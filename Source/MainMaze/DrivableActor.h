@@ -13,4 +13,5 @@ public:
     virtual void SetSpeedR(int speed) = 0;
     virtual void SetSpeedL(int speed) = 0;
     virtual void SetSpeed(int speedL, int speedR) = 0;
+    virtual void Drop() = 0;
 };

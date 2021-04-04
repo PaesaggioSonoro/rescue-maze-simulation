@@ -30,6 +30,14 @@ void AMainVehicle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (!(Speed_R == 0 || Speed_L == 0)) Move(DeltaTime);
+
+	if (drop_)
+	{
+		drop_ = false;
+		const auto location = GetActorLocation() + GetActorRotation().RotateVector(FVector(-10, 0, 0));
+		const auto rotator = GetActorRotation();
+		GetWorld()->SpawnActor<AActor>(BrickClass.Get(), location, rotator);
+	}
 }
 
 AActor* AMainVehicle::GetActor()
@@ -130,4 +138,9 @@ void AMainVehicle::Move(float Time)
 
 	FVector location = Center.toVector(Height);
 	SetActorLocationAndRotation(location, Rotator, false, nullptr, ETeleportType::None);
+}
+
+void AMainVehicle::Drop()
+{
+	drop_ = true;
 }

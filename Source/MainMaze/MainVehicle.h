@@ -25,12 +25,9 @@ public:
 
     UPROPERTY(EditAnywhere, Category = "Debug")
     bool EnableDebug = false;
-
-    UPROPERTY(EditAnywhere, Category = "Debug")
-    bool UseThread = false;
-
-    UPROPERTY(EditAnywhere, Category = "Debug")
-    int UpperLimit = 100000;
+    
+    UPROPERTY(EditAnywhere, Category = "Payload", meta = (DisplayName = "Brick to spawn"))
+    TSubclassOf<AActor> BrickClass;
 
     UPROPERTY(EditAnywhere, Category="Speed", meta = (ClampMin = "-255", ClampMax = "255", UIMin = "-15", UIMax = "15"))
     int Speed_R;
@@ -59,11 +56,15 @@ private:
     const float D = dimensions::width; // distanza tra ruote
     const float R = dimensions::width / 2; // D/2
     const float TO_DEGREES = 180 / M_PI;
-    const float WHEEL_ERROR = 0.15;  
+    const float WHEEL_ERROR = 0.15; 
+
+    bool drop_ = false;
 
     float GetDistance(int Speed, float Time);
     float GetRadius(float L1, float L2);
     float GetAngle(float L1, float L2, float Radius);
 
     void Move(float Time);
+
+    void Drop() override;
 };
