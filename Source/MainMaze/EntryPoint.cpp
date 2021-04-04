@@ -20,7 +20,7 @@ AEntryPoint::AEntryPoint()
 	FString FullPath;
 
 	if (fast_start)
-		FullPath = FPaths::ProjectContentDir() + R"(Maps\default.json)";
+		FullPath = FPaths::ProjectContentDir() + R"(Maps\default2.json)";
 	else
 		FullPath = FString(UPathManager::GetPath().c_str());
 
